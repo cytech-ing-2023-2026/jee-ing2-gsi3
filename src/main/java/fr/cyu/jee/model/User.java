@@ -13,7 +13,7 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -31,7 +31,7 @@ public abstract class User {
     protected User() {}
     protected User(String email, String password, String firstName, String lastName, LocalDate dob) {
         this.email = email;
-        this.password = password;
+        setPassword(password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
@@ -85,4 +85,5 @@ public abstract class User {
     public void setDOB(LocalDate dob) {
         this.dob = dob;
     }
+
 }

@@ -1,0 +1,31 @@
+
+.main_body{
+    margin: 0;
+    font-family: "Gill Sans", sans-serif;
+
+}
+
+.topdiv {
+    height: 16vh;
+    width: 100vw;
+    background: rgb(122,115,249);
+    background: linear-gradient(90deg, rgba(122,115,249,1) 0%, rgba(245,253,255,1) 100%);position: relative;
+    padding: 2vw;
+    font-size: 250%;
+    margin-bottom: 5vh;
+    color: white;
+}
+
+.centerdiv{
+    padding: 2vh;
+    display: flex;
+    margin: auto;
+    width: 80%;
+    text-align: center;
+    flex-direction: column;
+}
+
+.inputarea{
+    border-radius: 4px;
+    padding: 0.25%;
+}
