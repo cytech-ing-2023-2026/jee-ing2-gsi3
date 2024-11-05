@@ -5,7 +5,7 @@
 
 }
 
-.topdiv {
+.topdiv{
     height: 16vh;
     width: 100vw;
     background: rgb(122,115,249);
@@ -28,4 +28,18 @@
 .inputarea{
     border-radius: 4px;
     padding: 0.25%;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(133, 2, 255);
+}
+
+a:hover{
+    text-decoration: underline;
+
+}
+
+.error {
+    color: red;
 }
