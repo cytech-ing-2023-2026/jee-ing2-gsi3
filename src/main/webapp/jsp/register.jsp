@@ -14,7 +14,7 @@
     <c:if test='${pageContext.request.getAttribute("error") != null}'>
         <label class="error">${pageContext.request.getAttribute("error")}</label>
     </c:if>
-    <form name="loginForm" method="post" action="${pageContext.request.contextPath}/register">
+    <form name="registerForm" method="post" action="${pageContext.request.contextPath}/register">
         <label for="firstName">First name : </label>
         <input class="inputarea" type="text" id="firstName" name="firstName"/> <br/>
         <br>

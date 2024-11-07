@@ -14,6 +14,8 @@
     font-size: 250%;
     margin-bottom: 5vh;
     color: white;
+    display: flex;
+    flex-direction: row;
 }
 
 .centerdiv{
@@ -40,6 +42,28 @@ a:hover{
 
 }
 
-.error {
-    color: red;
+.buttonDivContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.buttonDiv{
+    background-color: rgb(212, 212, 212);
+    padding: 2%;
+    margin: 1%;
+    width: 50%;
+}
+
+.buttonDiv:hover{
+    background-color: rgb(177, 173, 254);
+}
+
+.topMenuContainer{
+    right: 5%;
+    bottom: 0;
+    position: absolute;
+}
+.icon{
+    width: 30px;
+    height: 30px;
 }

@@ -12,7 +12,7 @@
 </div>
 <div class="centerdiv">
 
-    <form name='loginForm' method='post' action='${pageContext.request.contextPath}/forgotten_password'>
+    <form name='forgottenPasswordForm' method='post' action='${pageContext.request.contextPath}/forgotten_password'>
         <label for=email>Enter the email of the account : </label>
         <input class="inputarea" type='text' id='email'/> <br/>
         <br>
