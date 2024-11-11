@@ -35,16 +35,6 @@ public class AuthController {
         return "forgotten_password";
     }
 
-    @RequestMapping(value="/teacher_menu", method = RequestMethod.GET)
-    public String getTeacherMenuPage(){
-        return "teacher_menu";
-    }
-
-    @RequestMapping(value="/grades_teacher", method = RequestMethod.GET)
-    public String getTeacherGradesPage(){
-        return "grades_teacher";
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(LoginDTO loginDTO, HttpSession session, Model model) {
         Optional<User> loggedIn = authService.authenticate(loginDTO);
