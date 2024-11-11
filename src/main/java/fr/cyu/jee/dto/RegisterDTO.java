@@ -1,7 +1,5 @@
 package fr.cyu.jee.dto;
 
-import fr.cyu.jee.model.Student;
-import fr.cyu.jee.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;

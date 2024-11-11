@@ -86,4 +86,12 @@ public abstract class User {
         this.dob = dob;
     }
 
+    public UserType getUserType() {
+        return switch (this) {
+            case Admin ignored -> UserType.ADMIN;
+            case Teacher ignored -> UserType.TEACHER;
+            case Student ignored -> UserType.STUDENT;
+            default -> throw new RuntimeException("Unknown user: " + this.getClass().getName());
+        };
+    }
 }
