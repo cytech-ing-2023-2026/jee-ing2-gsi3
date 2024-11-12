@@ -7,13 +7,11 @@ import fr.cyu.jee.model.User;
 import fr.cyu.jee.model.UserType;
 import fr.cyu.jee.service.UserRepository;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/grades")
 public class GradesController {
 
     @Autowired
@@ -29,7 +28,7 @@ public class GradesController {
     @Autowired
     SmartValidator validator;
 
-    @RequestMapping(value = "/grades", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String getTeacherGrades(HttpSession session) {
         if (session.getAttribute("user") == null) return "redirect:/login";
         else {
