@@ -1,4 +1,3 @@
-<%@ page import="fr.cyu.jee.model.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,20 +7,26 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
 </head>
 <body class="main_body">
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Welcome ${sessionScope.user.firstName}"/>
-</jsp:include>
+<div class="topdiv">
+    <p>Welcome, </p> <!-- Can add the username here -->
+</div>
 <div class="centerdiv">
     <c:if test='${pageContext.request.getAttribute("error") != null}'>
         <label class="error">${pageContext.request.getAttribute("error")}</label>
     </c:if>
 
     <div class="buttonDivContainer">
-        <div class="buttonDiv" id="planning" onclick="${pageContext.request.contextPath}/planning">
-            <p>Planning</p>
+        <div class="buttonDiv" id="addTeacher">
+            <p>Add a Teacher</p>
         </div>
-        <div class="buttonDiv" id="gradesStudent" onclick="${pageContext.request.contextPath}/grades">
-            <p>Grades</p>
+        <div class="buttonDiv" id="addStudent">
+            <p>Add a Student</p>
+        </div>
+        <div class="buttonDiv" id="searchUser">
+            <p>Search for a user</p>
+        </div>
+        <div class="buttonDiv" id="removeUser">
+            <p>Remove a user</p>
         </div>
     </div>
 </div>
