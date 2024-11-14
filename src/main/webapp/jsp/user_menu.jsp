@@ -1,4 +1,3 @@
-<%@ page import="fr.cyu.jee.model.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,10 +16,10 @@
     </c:if>
 
     <div class="buttonDivContainer">
-        <div class="buttonDiv" id="planning" onclick="${pageContext.request.contextPath}/planning">
+        <div class="buttonDiv" id="planning"  onclick="window.location.href='${pageContext.request.contextPath}/planning'">
             <p>Planning</p>
         </div>
-        <div class="buttonDiv" id="gradesStudent" onclick="${pageContext.request.contextPath}/grades">
+        <div class="buttonDiv" id="gradesStudent"  onclick="window.location.href='${pageContext.request.contextPath}/grades'">
             <p>Grades</p>
         </div>
     </div>

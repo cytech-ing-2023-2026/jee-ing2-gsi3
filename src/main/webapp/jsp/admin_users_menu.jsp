@@ -9,6 +9,10 @@
 <body class="main_body">
 <div class="topdiv">
     <p>Welcome, </p> <!-- Can add the username here -->
+    <div class="topMenuContainer">
+        <img src="${pageContext.request.contextPath}/pictures/HomeDark.png" alt="Home icon" class="icon" id="home" onclick="window.location.href='${pageContext.request.contextPath}/home'">
+        <img src="${pageContext.request.contextPath}/pictures/LogoutDark.png" alt="Logout icon" class="icon" id="logout">
+    </div>
 </div>
 <div class="centerdiv">
     <c:if test='${pageContext.request.getAttribute("error") != null}'>
@@ -16,16 +20,16 @@
     </c:if>
 
     <div class="buttonDivContainer">
-        <div class="buttonDiv" id="addTeacher">
+        <div class="buttonDiv" id="addTeacher" onclick="window.location.href='${pageContext.request.contextPath}/'">
             <p>Add a Teacher</p>
         </div>
-        <div class="buttonDiv" id="addStudent">
+        <div class="buttonDiv" id="addStudent" onclick="window.location.href='${pageContext.request.contextPath}/'">
             <p>Add a Student</p>
         </div>
-        <div class="buttonDiv" id="searchUser">
+        <div class="buttonDiv" id="searchUser" onclick="window.location.href='${pageContext.request.contextPath}/'">
             <p>Search for a user</p>
         </div>
-        <div class="buttonDiv" id="removeUser">
+        <div class="buttonDiv" id="removeUser" onclick="window.location.href='${pageContext.request.contextPath}/'">
             <p>Remove a user</p>
         </div>
     </div>
