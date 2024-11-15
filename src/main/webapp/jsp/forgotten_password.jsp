@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
 </head>
 <body class="main_body">
-<div class="topdiv">
-    <p>Forgot your password?</p>
-</div>
+<jsp:include page="banner.jsp">
+    <jsp:param name="title" value="Forgotten password"/>
+</jsp:include>
 <div class="centerdiv">
-
     <form name='forgottenPasswordForm' method='post' action='${pageContext.request.contextPath}/forgotten_password'>
         <label for=email>Enter the email of the account : </label>
         <input class="inputarea" type='text' id='email'/> <br/>
