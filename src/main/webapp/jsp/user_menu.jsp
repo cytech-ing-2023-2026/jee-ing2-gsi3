@@ -1,3 +1,4 @@
+<%@ page import="fr.cyu.jee.model.User" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,9 +8,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
 </head>
 <body class="main_body">
-<div class="topdiv">
-    <p>Welcome, </p> <!-- Can add the username here -->
-</div>
+<jsp:include page="banner.jsp">
+    <jsp:param name="title" value="Welcome ${sessionScope.user.firstName}"/>
+</jsp:include>
 <div class="centerdiv">
     <c:if test='${pageContext.request.getAttribute("error") != null}'>
         <label class="error">${pageContext.request.getAttribute("error")}</label>
