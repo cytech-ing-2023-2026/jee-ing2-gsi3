@@ -17,7 +17,9 @@
 </head>
 <body>
 
-<h2 style="text-align: center;">Emploi du Temps</h2>
+<jsp:include page="banner.jsp">
+    <jsp:param name="title" value="Emploi du temps"/>
+</jsp:include>
 
 <%
     // Récupération et formatage de la date sélectionnée
@@ -57,20 +59,22 @@
     <!-- Créneaux horaires statiques dans la première colonne et cellules vides pour chaque jour -->
     <%
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), java.time.LocalTime.of(8, 0)); // Heure de début à 8h00
+        DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("HH:mm");
         for (int i = 0; i < (20 - 8) * 4; i++) { // Boucle pour créer 48 créneaux de 15 minutes (de 8h00 à 20h00)
             if (i % 2 == 0) {
-                String timeLabel = startTime.plusMinutes(i * 15).format(DateTimeFormatter.ofPattern("HH:mm")); // Formatage de chaque créneau horaire
-                String timeStyle = "grid-row-start: " + (i + 2) + "; grid-row-end: " + (i + 4) + "; grid-column: 1;";
+                String timeLabel = startTime.plusMinutes(i * 15).format(hourFormatter); // Formatage de chaque créneau horaire
+                String timeStyle = "grid-row-start: " + (i + 2) + "; grid-row-end: " + (i + 4) + ";";
     %>
     <div class="time-slot" style="<%= timeStyle%>"><%= timeLabel %>
     </div> <!-- Affichage du créneau horaire dans la première colonne -->
     <!-- Cellules vides avec bordure pour chaque jour de la semaine -->
     <%
         }
+        String cellRow = "quarter-" + i % 4;
         for (int j = 0; j < 7; j++) {
             String cellStyle = "grid-row: " + (i + 2) + ";grid-column: " + (j + 2) + ";";
     %>
-    <div class="empty-cell" style="<%= cellStyle %>"></div>
+    <div class="empty-cell <%= cellRow %>" style="<%= cellStyle %>"></div>
     <% } %>
     <% } %>
 
@@ -81,7 +85,10 @@
         int durationSlots = (int) course.getDuration().toMinutes() / 15; // Calcul de la durée du cours en créneaux de 15 minutes
         String cellStyle = "grid-column: " + (dayColumn + 1) + "; grid-row: " + (beginHour + 2) + " / span " + durationSlots + ";"; // Style CSS dynamique pour positionner le cours dans la grille
     %>
-    <div class="course" style="<%= cellStyle %>"><%= course.getSubject().getName() %>
+    <div class="course" style="<%= cellStyle %>">
+        <label class="subject"><%= course.getSubject().getName() %></label>
+        <label class="hour"><%= course.getBeginDate().format(hourFormatter) %> - <%= course.getEndDate().format(hourFormatter) %></label>
+        <label class="teacher"><%= course.getTeacher().getFirstName() + " " + course.getTeacher().getLastName().toUpperCase() %></label>
     </div> <!-- Affichage du cours avec son style positionné dans la grille -->
     <% } %>
 </div>
