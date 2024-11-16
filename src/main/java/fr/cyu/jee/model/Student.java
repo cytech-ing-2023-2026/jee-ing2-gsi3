@@ -1,11 +1,9 @@
 package fr.cyu.jee.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +14,10 @@ public class Student extends User {
     private Set<Grade> grades;
 
     @ManyToMany
+    @JoinTable(name="students_courses",
+            joinColumns=@JoinColumn(name="student_id"),
+            inverseJoinColumns=@JoinColumn(name="course_id")
+    )
     private Set<Course> courses;
 
     protected Student() {}

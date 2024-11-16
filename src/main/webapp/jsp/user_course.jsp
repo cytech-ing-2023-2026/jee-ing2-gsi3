@@ -1,15 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page
-        import="fr.cyu.jee.model.Course, fr.cyu.jee.model.Subject, fr.cyu.jee.model.Teacher, fr.cyu.jee.model.Student" %>
-<%@ page import="java.util.ArrayList, java.util.List, java.util.HashSet" %>
-<%@ page
-        import="java.time.LocalDateTime, java.time.LocalDate, java.time.Duration, java.time.format.DateTimeFormatter" %>
+<%@ page import="fr.cyu.jee.model.Course" %>
+<%@ page import="java.time.LocalDateTime, java.time.LocalDate, java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Set" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Emploi du Temps</title>
+    <title>Timetable</title>
     <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet">
     <!-- Lien vers le fichier CSS principal -->
     <link href="${pageContext.request.contextPath}/css/course/user.css" rel="stylesheet">
@@ -18,43 +15,32 @@
 <body>
 
 <jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Emploi du temps"/>
+    <jsp:param name="title" value="Timetable"/>
 </jsp:include>
 
 <%
-    // Récupération et formatage de la date sélectionnée
-    String dateParam = request.getParameter("date"); // Récupère la date sélectionnée dans les paramètres de requête
-    LocalDate selectedDate = (dateParam != null) ? LocalDate.parse(dateParam) : LocalDate.now(); // Utilise la date du jour si aucun paramètre n'est fourni
+    LocalDate selectedMonday = (LocalDate) request.getAttribute("selectedMonday");
+    LocalDate selectedSunday = (LocalDate) request.getAttribute("selectedSunday");
+    Set<Course> courses = (Set<Course>) request.getAttribute("courses");
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy"); // Format pour afficher la date
-    String formattedDate = selectedDate.format(formatter); // Formatage de la date sélectionnée
-
-    // Initialisation de la liste des cours
-    List<Course> courses = new ArrayList<>(); // Liste de cours pour l'affichage
-    Teacher teacher1 = new Teacher("dupont@example.com", "password123", "Jean", "Dupont", LocalDate.of(1980, 5, 20)); // Exemple d'enseignant
-    Subject math = new Subject("Mathématiques"); // Exemple de matière
-    Set<Student> students = new HashSet<>(); // Ensemble d'étudiants (vide pour cet exemple)
-
-    // Ajout des cours (exemple de test)
-    if (selectedDate.equals(LocalDate.of(2024, 11, 15))) { // Si la date sélectionnée est le 15 novembre 2024
-        courses.add(new Course(LocalDateTime.of(2024, 11, 15, 8, 0), Duration.ofMinutes(60), math, teacher1, students)); // Ajoute un cours de mathématiques
-        courses.add(new Course(LocalDateTime.of(2024, 11, 15, 9, 15), Duration.ofMinutes(90), new Subject("Physique"), teacher1, students)); // Ajoute un cours de physique
-    } else if (selectedDate.equals(LocalDate.of(2024, 11, 16))) { // Si la date sélectionnée est le 16 novembre 2024
-        courses.add(new Course(LocalDateTime.of(2024, 11, 16, 10, 0), Duration.ofMinutes(60), new Subject("Chimie"), teacher1, students)); // Ajoute un cours de chimie
-        courses.add(new Course(LocalDateTime.of(2024, 11, 16, 11, 30), Duration.ofMinutes(60), new Subject("Histoire"), teacher1, students)); // Ajoute un cours d'histoire
-    }
+    DateTimeFormatter weekFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 %>
 
+<div class="week-header">
+    <button onclick="window.location.href = '?date=<%= selectedMonday.minusWeeks(1).format(weekFormatter) %>'">&lt;</button>
+    <h1><%= selectedMonday.format(weekFormatter) %> - <%= selectedSunday.format(weekFormatter) %></h1>
+    <button onclick="window.location.href = '?date=<%= selectedMonday.plusWeeks(1).format(weekFormatter) %>'">&gt;</button>
+</div>
 <div class="timetable">
     <!-- En-têtes des jours de la semaine -->
     <div></div> <!-- Cellule vide pour l'angle en haut à gauche -->
-    <div class="day-header">Lundi</div>
-    <div class="day-header">Mardi</div>
-    <div class="day-header">Mercredi</div>
-    <div class="day-header">Jeudi</div>
-    <div class="day-header">Vendredi</div>
-    <div class="day-header">Samedi</div>
-    <div class="day-header">Dimanche</div>
+    <div class="day-header">Monday</div>
+    <div class="day-header">Tuesday</div>
+    <div class="day-header">Wednesday</div>
+    <div class="day-header">Thursday</div>
+    <div class="day-header">Friday</div>
+    <div class="day-header">Saturday</div>
+    <div class="day-header">Sunday</div>
 
     <!-- Créneaux horaires statiques dans la première colonne et cellules vides pour chaque jour -->
     <%

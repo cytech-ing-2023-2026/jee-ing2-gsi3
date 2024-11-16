@@ -1,3 +1,11 @@
+.week-header {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .timetable {
     display: grid; /* Structure en grille */
     grid-template-columns: 100px repeat(7, 1fr); /* Colonne pour les horaires et 7 colonnes pour les jours */

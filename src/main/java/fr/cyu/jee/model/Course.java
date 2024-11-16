@@ -26,6 +26,10 @@ public class Course {
     private Teacher teacher;
 
     @ManyToMany
+    @JoinTable(name="students_courses",
+            joinColumns=@JoinColumn(name="course_id"),
+            inverseJoinColumns=@JoinColumn(name="student_id")
+    )
     private Set<Student> students;
 
     protected Course() {
