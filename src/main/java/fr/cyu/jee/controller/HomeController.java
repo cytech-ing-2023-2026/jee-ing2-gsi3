@@ -11,13 +11,10 @@ public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getHomePage(HttpSession session) {
-        if(session.getAttribute("user") == null) return "redirect:/login";
-        else {
-            User user = (User) session.getAttribute("user");
-            return switch (user.getUserType()) {
-                case ADMIN -> "admin_menu";
-                case TEACHER, STUDENT -> "user_menu";
-            };
-        }
+        User user = (User) session.getAttribute("user");
+        return switch (user.getUserType()) {
+            case ADMIN -> "admin_menu";
+            case TEACHER, STUDENT -> "user_menu";
+        };
     }
 }
