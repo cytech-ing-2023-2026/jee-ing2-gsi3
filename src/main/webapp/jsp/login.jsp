@@ -15,6 +15,7 @@
         <label class="error">${pageContext.request.getAttribute("error")}</label>
     </c:if>
     <form name="loginForm" method="post" action="${pageContext.request.contextPath}/login">
+        <input type="hidden" name="redirect" value="${pageContext.request.getParameter("redirect")}">
         <label for="email">Username : </label>
         <input class="inputarea" type="text" id="email" name="email"/> <br/>
         <br>

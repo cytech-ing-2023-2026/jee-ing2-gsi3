@@ -40,7 +40,7 @@ public class AuthController {
         Optional<User> loggedIn = authService.authenticate(loginDTO);
         if(loggedIn.isPresent()){
             session.setAttribute("user", loggedIn.get());
-            return "redirect:/";
+            return "redirect:" + loginDTO.getRedirectOrHome();
         } else {
             model.addAttribute("error", "Invalid email or password");
             return "login";
