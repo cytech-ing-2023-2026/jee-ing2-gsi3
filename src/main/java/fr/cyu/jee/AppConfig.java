@@ -14,11 +14,16 @@ public class AppConfig implements WebMvcConfigurer {
         //TODO Add other endpoints
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns(
                 "/home",
+                "/course"
+                "/home",
                 "/grades",
                 "/grades/**"
         );
 
         //TODO Add admin endpoints
-        //registry.addInterceptor(new AdminInterceptor());
+        registry.addInterceptor(new AdminInterceptor()).addPathPatterns(
+                "/admin",
+                "/admin/**"
+        );
     }
 }
