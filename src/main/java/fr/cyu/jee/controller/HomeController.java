@@ -18,19 +18,6 @@ public class HomeController {
         };
     }
 
-    @RequestMapping(value = "/grades", method = RequestMethod.GET)
-    public String getGradesPage(HttpSession session) {
-        if(session.getAttribute("user") == null) return "redirect:/login";
-        else {
-            User user = (User) session.getAttribute("user");
-            return switch (user.getUserType()) {
-                case ADMIN -> "admin_grades";
-                case TEACHER -> "teacher_grades";
-                case STUDENT -> "student_grades";
-            };
-        }
-    }
-
     @RequestMapping(value = "/planning", method = RequestMethod.GET)
     public String getPlanningPage(HttpSession session) {
         if(session.getAttribute("user") == null) return "redirect:/login";

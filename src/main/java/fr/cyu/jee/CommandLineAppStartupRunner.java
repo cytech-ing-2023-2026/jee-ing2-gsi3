@@ -23,6 +23,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Override
     public void run(String...args) {
         Subject java = subjectRepository.save(new Subject("Java"));
+        subjectRepository.save(new Subject("Statistiques"));
+        subjectRepository.save(new Subject("Architecture réseau"));
         authService.register(new RegisterDTO("Markus", "Persson", LocalDate.of(1979, 6, 1), "notch@minecraft.net", "markus"), UserType.ADMIN);
         authService.register(new RegisterDTO("Markus", "Persson-Teacher", LocalDate.of(1979, 6, 1), "notch_teacher@minecraft.net", "markus"), UserType.TEACHER, java);
         authService.register(new RegisterDTO("Markus", "Persson-Student", LocalDate.of(1979, 6, 1), "notch_student@minecraft.net", "markus"), UserType.STUDENT);
