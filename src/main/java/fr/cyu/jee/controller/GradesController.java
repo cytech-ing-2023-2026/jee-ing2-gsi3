@@ -114,6 +114,20 @@ public class GradesController {
                 gradeRepository.save(grade);
                 yield new ModelAndView("redirect:/grades");
             }
+
+            case Teacher teacher -> {
+                if(teacher.getSubject().getId() != dto.getGrade().getSubject().getId())
+                    yield new ModelAndView("redirect:/grades", Map.of("error", "This grade is not associated with your teaching subject"));
+                else if(dto.getSubject().isPresent())
+                    yield new ModelAndView("redirect:/grades", Map.of("error", "Only admins can change the subject of a grade"));
+                else {
+                    Grade grade = dto.getGrade();
+                    grade.setValue(dto.getValue());
+                    gradeRepository.save(grade);
+                    yield new ModelAndView("redirect:/grades");
+                }
+            }
+
             default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         };
     }

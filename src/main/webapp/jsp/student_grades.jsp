@@ -1,10 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="fr.cyu.jee.model.Grade" %>
 <%@ page import="java.util.List" %>
-<%@ page import="fr.cyu.jee.model.User" %>
-<%@ page import="fr.cyu.jee.model.UserType" %>
-<%@ page import="fr.cyu.jee.model.Subject" %>
+<%@ page import="fr.cyu.jee.CustomDateTimeFormatter" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +51,8 @@
                 <tr>
                     <th>Subject</th>
                     <th>Grade</th>
-                    <th>Date</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,7 +62,8 @@
                     <tr>
                         <td><%= grade.getSubject().getName() %></td>
                         <td><%= grade.getValue() %></td>
-                        <td><%= grade.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE) %></td>
+                        <td><%= grade.getCreatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
+                        <td><%= grade.getUpdatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
                     </tr>
                 <% } %>
                 </tbody>

@@ -1,10 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="fr.cyu.jee.model.Grade" %>
 <%@ page import="java.util.List" %>
 <%@ page import="fr.cyu.jee.model.User" %>
 <%@ page import="fr.cyu.jee.model.UserType" %>
 <%@ page import="fr.cyu.jee.model.Subject" %>
+<%@ page import="fr.cyu.jee.CustomDateTimeFormatter" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,8 +64,8 @@
                     if(((User)session.getAttribute("user")).getUserType() == UserType.ADMIN) {
                 %>
                 <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <select class="inputarea" id="subject" name="subject" required>
+                    <label for="subject_add">Subject:</label>
+                    <select class="inputarea" id="subject_add" name="subject" required>
                         <%
                             for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
                         %>
@@ -122,7 +122,8 @@
                             <% } %>
                         </td>
                         <td><input class="inputarea" type="number" name="value" step="0.01" min="0" form="update_form" value="<%= grade.getValue() %>" required/></td>
-                        <td><%= grade.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE) %></td>
+                        <td><%= grade.getCreatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
+                        <td><%= grade.getUpdatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
                         <td>
                             <input type="hidden" name="grade" value="<%= grade.getId() %>" form="delete_form">
                             <input type="submit" value="delete" form="delete_form">
