@@ -20,12 +20,12 @@ public class AuthService {
         return userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
     }
 
-    public Optional<User> register(RegisterDTO registerDTO, UserType userType, Subject subject) {
+    public Optional<User> register(RegisterDTO registerDTO, Subject subject) {
         if(userRepository.findByEmail(registerDTO.getEmail()).isPresent()) return Optional.empty();
-        else return Optional.of(userRepository.save(userType.createUser(registerDTO.getEmail(), registerDTO.getPassword(), registerDTO.getFirstName(), registerDTO.getLastName(), registerDTO.getDob(), subject)));
+        else return Optional.of(userRepository.save(registerDTO.getUserType().createUser(registerDTO.getEmail(), registerDTO.getPassword(), registerDTO.getFirstName(), registerDTO.getLastName(), registerDTO.getDob(), subject)));
     }
 
-    public Optional<User> register(RegisterDTO registerDTO, UserType userType) {
-        return register(registerDTO, userType, null);
+    public Optional<User> register(RegisterDTO registerDTO) {
+        return register(registerDTO, null);
     }
 }

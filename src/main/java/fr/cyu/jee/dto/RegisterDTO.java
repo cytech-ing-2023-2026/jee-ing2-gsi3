@@ -43,6 +43,10 @@ public class RegisterDTO {
         this.userType = userType;
     }
 
+    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, UserType userType) {
+        this(firstName, lastName, dob, email, password, userType.name());
+    }
+
     public @NotBlank String getFirstName() {
         return firstName;
     }

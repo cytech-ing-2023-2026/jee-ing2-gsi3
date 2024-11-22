@@ -72,20 +72,17 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public ModelAndView removeUser(@RequestParam("userId") int userId, HttpSession session, Model model) {
-        userService.deleteUserById(userId);
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
+    public ModelAndView removeUser(@RequestParam("userId") int userId) {
+        userRepository.deleteById(userId);
+        return new ModelAndView("redirect:/display", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/displayModify", method = RequestMethod.POST)
-    public String displayModifyUser(@RequestParam("userId") int userId, HttpSession session, Model model) {
+    public ModelAndView displayModifyUser(@RequestParam("userId") int userId) {
         // Fetch user by ID
-        User user = userService.findById(userId);
-
-        // Add user to the model
-        model.addAttribute("user", user);
-
-        return "admin_modify_users";
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()) return new ModelAndView("admin_display_users", Map.of("user", user.get(), "users", userRepository.findAllByOrderByIdAsc()));
+        else return new ModelAndView("redirect:/display", Map.of("error", "Unknown user with id " + userId));
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
@@ -94,11 +91,11 @@ public class AdminController {
                                    @RequestParam("lastName") String lastName,
                                    @RequestParam("dob") LocalDate dob,
                                    @RequestParam("password") String password,
-                                   @RequestParam("email") String email, Model model) {
+                                   @RequestParam("email") String email) {
 
-        User currentUser = userRepository.findById(userId);
-        if (userRepository.existsById(userId)) {
-
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            User currentUser = user.get();
 
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
@@ -106,6 +103,9 @@ public class AdminController {
             currentUser.setPassword(password);
             currentUser.setDob(dob);
 
+            userRepository.save(currentUser);
+
+            return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
         } else {
             throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
         }
