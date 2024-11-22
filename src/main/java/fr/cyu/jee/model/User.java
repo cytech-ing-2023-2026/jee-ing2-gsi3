@@ -78,11 +78,11 @@ public abstract class User {
         this.lastName = lastName;
     }
 
-    public LocalDate getDOB() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDOB(LocalDate dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

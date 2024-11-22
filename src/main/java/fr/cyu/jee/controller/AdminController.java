@@ -1,19 +1,30 @@
 package fr.cyu.jee.controller;
 
+import fr.cyu.jee.dto.RegisterDTO;
 import fr.cyu.jee.dto.AddCourseDTO;
 import fr.cyu.jee.dto.DeleteCourseDTO;
 import fr.cyu.jee.dto.UpdateCourseDTO;
 import fr.cyu.jee.model.Course;
 import fr.cyu.jee.model.Student;
 import fr.cyu.jee.model.User;
+import fr.cyu.jee.service.AuthService;
+import fr.cyu.jee.service.UserRepository;
+import fr.cyu.jee.service.UserService;
 import fr.cyu.jee.service.CourseRepository;
 import fr.cyu.jee.service.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashSet;
@@ -25,14 +36,99 @@ import java.util.Set;
 public class AdminController {
 
     @Autowired
-    private CourseRepository courseRepository;
+    private AuthService authService;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getHomePage(HttpSession session) {
+        return "admin_users_menu";
+    }
+
+    @RequestMapping(value = "/add_users", method = RequestMethod.GET)
+    public String getAddUserPage(HttpSession session) {
+        return "admin_add_users";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(RegisterDTO registerDTO, HttpSession session, Model model) {
+        Optional<User> registered = authService.register(registerDTO);
+        if(registered.isPresent()){
+            session.setAttribute("user", registered.get());
+            return "admin_add_users";
+        } else {
+            model.addAttribute("error", "Email is already taken");
+            return "admin_add_users";
+        }
+    }
+
+    @RequestMapping(value = "/display", method = RequestMethod.GET)
+    public ModelAndView getDisplayPage() {
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    public ModelAndView removeUser(@RequestParam("userId") int userId, HttpSession session, Model model) {
+        userService.deleteUserById(userId);
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+    }
+
+    @RequestMapping(value = "/displayModify", method = RequestMethod.POST)
+    public String displayModifyUser(@RequestParam("userId") int userId, HttpSession session, Model model) {
+        // Fetch user by ID
+        User user = userService.findById(userId);
+
+        // Add user to the model
+        model.addAttribute("user", user);
+
+        return "admin_modify_users";
+    }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    public ModelAndView modifyUser(@RequestParam("userId") int userId,
+                                   @RequestParam("firstName") String firstName,
+                                   @RequestParam("lastName") String lastName,
+                                   @RequestParam("dob") LocalDate dob,
+                                   @RequestParam("password") String password,
+                                   @RequestParam("email") String email, Model model) {
+
+        User currentUser = userRepository.findById(userId);
+        if (userRepository.existsById(userId)) {
+
+
+            currentUser.setFirstName(firstName);
+            currentUser.setLastName(lastName);
+            currentUser.setEmail(email);
+            currentUser.setPassword(password);
+            currentUser.setDob(dob);
+
+        } else {
+            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
+        }
+
+        userService.updateUser(currentUser);
+
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+    }
+
+    @RequestMapping(value = "/grades", method = RequestMethod.GET)
+    public String getGradesPage(HttpSession session) {
         if(session.getAttribute("user") == null) return "redirect:/login";
         else {
+            return "admin_grades";
+
+        }
+    }
+
+    @RequestMapping(value = "/planning", method = RequestMethod.GET)
+    public String getPlanningPage(HttpSession session) {
+        if(session.getAttribute("user") == null) return "redirect:/login";
+        else {
+            return "admin_planning";
 
             User user = (User) session.getAttribute("user");
             return switch (user.getUserType()) {

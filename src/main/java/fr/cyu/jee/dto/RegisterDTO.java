@@ -1,7 +1,10 @@
 package fr.cyu.jee.dto;
 
+import fr.cyu.jee.model.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -24,14 +27,20 @@ public class RegisterDTO {
     @NotBlank
     private String password;
 
+    @NotBlank
+    @NotNull
+    @Pattern(regexp = "ADMIN|TEACHER|STUDENT")
+    private String userType;
+
     public RegisterDTO() {}
 
-    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password) {
+    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.email = email;
         this.password = password;
+        this.userType = userType;
     }
 
     public @NotBlank String getFirstName() {
@@ -73,4 +82,14 @@ public class RegisterDTO {
     public void setPassword(@NotBlank String password) {
         this.password = password;
     }
+
+    public UserType getUserType() {
+        return UserType.valueOf(userType);
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+
 }

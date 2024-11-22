@@ -16,13 +16,13 @@
   </c:if>
 
   <div class="buttonDivContainer">
-    <div class="buttonDiv" id="admin_users_menu" onclick="window.location.href='${pageContext.request.contextPath}/users'">
+    <div class="buttonDiv" id="admin_users_menu" onclick="window.location.href='${pageContext.request.contextPath}/admin/users'">
       <p>Users</p>
     </div>
-    <div class="buttonDiv" id="admin_planning" onclick="window.location.href='${pageContext.request.contextPath}/planning'">
+    <div class="buttonDiv" id="admin_planning" onclick="window.location.href='${pageContext.request.contextPath}/admin/planning'">
       <p>Planning</p>
     </div>
-    <div class="buttonDiv" id="admin_grades" onclick="window.location.href='${pageContext.request.contextPath}/grades'">
+    <div class="buttonDiv" id="admin_grades" onclick="window.location.href='${pageContext.request.contextPath}/admin/grades'">
       <p>Grades</p>
     </div>
 

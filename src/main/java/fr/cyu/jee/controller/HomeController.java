@@ -24,7 +24,7 @@ public class HomeController {
         else {
             User user = (User) session.getAttribute("user");
             return switch (user.getUserType()) {
-                case ADMIN -> "admin_planning";
+                case ADMIN -> "/admin/admin_planning";
                 case TEACHER -> "teacher_planning";
                 case STUDENT -> "student_planning";
             };

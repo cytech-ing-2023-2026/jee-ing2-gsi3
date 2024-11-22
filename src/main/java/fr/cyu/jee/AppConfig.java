@@ -11,6 +11,7 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        //TODO Add other endpoints
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns(
                 "/home",
                 "/course",
@@ -18,6 +19,7 @@ public class AppConfig implements WebMvcConfigurer {
                 "/grades/**"
         );
 
+        //TODO Add admin endpoints
         registry.addInterceptor(new AdminInterceptor()).addPathPatterns(
                 "/admin",
                 "/admin/**"

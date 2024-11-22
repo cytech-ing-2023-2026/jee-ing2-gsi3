@@ -16,18 +16,16 @@
     </c:if>
 
     <div class="buttonDivContainer">
-        <div class="buttonDiv" id="addTeacher" onclick="window.location.href='${pageContext.request.contextPath}/'">
-            <p>Add a Teacher</p>
+        <div class="buttonDiv" id="addUser" onclick="window.location.href='${pageContext.request.contextPath}/admin/add_users'">
+            <p>Add a user</p>
         </div>
-        <div class="buttonDiv" id="addStudent" onclick="window.location.href='${pageContext.request.contextPath}/'">
-            <p>Add a Student</p>
+        <div class="buttonDiv" id="displayUser" onclick="window.location.href='${pageContext.request.contextPath}/admin/display'">
+            <p>Modify or delete a user</p>
         </div>
         <div class="buttonDiv" id="searchUser" onclick="window.location.href='${pageContext.request.contextPath}/'">
             <p>Search for a user</p>
         </div>
-        <div class="buttonDiv" id="removeUser" onclick="window.location.href='${pageContext.request.contextPath}/'">
-            <p>Remove a user</p>
-        </div>
+
     </div>
 </div>
 
