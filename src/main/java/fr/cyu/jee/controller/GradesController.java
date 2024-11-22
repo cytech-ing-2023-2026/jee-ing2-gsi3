@@ -1,6 +1,7 @@
 package fr.cyu.jee.controller;
 
 import fr.cyu.jee.dto.AddGradeDTO;
+import fr.cyu.jee.dto.DeleteGradeDTO;
 import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.GradeRepository;
 import fr.cyu.jee.service.SubjectRepository;
@@ -9,9 +10,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-import org.springframework.validation.SmartValidator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,6 +78,26 @@ public class GradesController {
                     yield new ModelAndView("redirect:/grades", Map.of("message", student.getFirstName() + " " + student.getLastName() + " got the grade " + dto.getGrade() + " in " + teacher.getSubject()));
                 }
             }
+            default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        };
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ModelAndView deleteGrades(@Validated DeleteGradeDTO dto, HttpSession session) {
+        return switch ((User) session.getAttribute("user")) {
+            case Admin ignored -> {
+                gradeRepository.delete(dto.getGrade());
+                yield new ModelAndView("redirect:/grades");
+            }
+            case Teacher teacher -> {
+                if(teacher.getSubject().getId() == dto.getGrade().getSubject().getId()) {
+                    gradeRepository.delete(dto.getGrade());
+                    yield new ModelAndView("redirect:/grades");
+                } else {
+                    yield new ModelAndView("redirect:/grades", Map.of("error", "This grade is not associated with your teaching subject"));
+                }
+            }
+
             default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         };
     }

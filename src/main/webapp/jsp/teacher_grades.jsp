@@ -89,6 +89,7 @@
                     <th>Subject</th>
                     <th>Grade</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -101,6 +102,12 @@
                         <td><%= grade.getSubject().getName() %></td>
                         <td><%= grade.getValue() %></td>
                         <td><%= grade.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE) %></td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/grades/delete" method="post">
+                                <input type="hidden" name="grade" value="<%= grade.getId() %>">
+                                <input type="submit" value="delete">
+                            </form>
+                        </td>
                     </tr>
                 <% } %>
                 </tbody>
