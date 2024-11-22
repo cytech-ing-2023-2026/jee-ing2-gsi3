@@ -48,8 +48,8 @@
     <div style="display: flex;">
         <!-- Formulaire à gauche -->
         <div style="flex: 1; padding: 10px; border-right: 1px solid gray;">
-            <c:if test='${not empty error}'>
-                <div class="error"><c:out value="${error}" /></div>
+            <c:if test='${pageContext.request.getAttribute("error") != null}'>
+                <label class="error">${pageContext.request.getAttribute("error")}</label>
             </c:if>
             <form name="addGradesForm" method="post" action="${pageContext.request.contextPath}/grades/add">
                 <div class="form-group">
@@ -97,16 +97,36 @@
                     for(Grade grade : (List<Grade>) pageContext.getRequest().getAttribute("grades")) {
                 %>
                     <tr>
+                        <form id="delete_form" action="${pageContext.request.contextPath}/grades/delete" method="post"></form>
+                        <form id="update_form" action="${pageContext.request.contextPath}/grades/update" method="post"></form>
+
+                        <input type="hidden" name="grade" value="<%= grade.getId() %>" form="update_form">
                         <td><%= grade.getStudent().getLastName().toUpperCase() %></td>
                         <td><%= grade.getStudent().getFirstName() %></td>
-                        <td><%= grade.getSubject().getName() %></td>
-                        <td><%= grade.getValue() %></td>
+                        <td>
+                            <%
+                                if(((User)session.getAttribute("user")).getUserType() == UserType.ADMIN) {
+                            %>
+                            <select class="inputarea" id="subject" name="subject" form="update_form" required>
+                                <%
+                                    for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
+                                        if(subject.getId() == grade.getSubject().getId()) {
+                                %>
+                                <option value="<%= subject.getId() %>" selected><%= subject.getName() %></option>
+                                <% } else { %>
+                                <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
+                                <% }} %>
+                            </select>
+                            <% } else { %>
+                                <%= grade.getSubject().getName() %>
+                            <% } %>
+                        </td>
+                        <td><input class="inputarea" type="number" name="value" step="0.01" min="0" form="update_form" value="<%= grade.getValue() %>" required/></td>
                         <td><%= grade.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE) %></td>
                         <td>
-                            <form action="${pageContext.request.contextPath}/grades/delete" method="post">
-                                <input type="hidden" name="grade" value="<%= grade.getId() %>">
-                                <input type="submit" value="delete">
-                            </form>
+                            <input type="hidden" name="grade" value="<%= grade.getId() %>" form="delete_form">
+                            <input type="submit" value="delete" form="delete_form">
+                            <input type="submit" value="Update" form="update_form">
                         </td>
                     </tr>
                 <% } %>

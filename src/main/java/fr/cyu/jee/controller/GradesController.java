@@ -2,6 +2,7 @@ package fr.cyu.jee.controller;
 
 import fr.cyu.jee.dto.AddGradeDTO;
 import fr.cyu.jee.dto.DeleteGradeDTO;
+import fr.cyu.jee.dto.UpdateGradeDTO;
 import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.GradeRepository;
 import fr.cyu.jee.service.SubjectRepository;
@@ -84,6 +85,7 @@ public class GradesController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView deleteGrades(@Validated DeleteGradeDTO dto, HttpSession session) {
+        System.out.println("DELETE " + dto.getGrade().getId());
         return switch ((User) session.getAttribute("user")) {
             case Admin ignored -> {
                 gradeRepository.delete(dto.getGrade());
@@ -98,6 +100,20 @@ public class GradesController {
                 }
             }
 
+            default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        };
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ModelAndView updateGrades(@Validated UpdateGradeDTO dto, HttpSession session) {
+        return switch ((User) session.getAttribute("user")) {
+            case Admin ignored -> {
+                Grade grade = dto.getGrade();
+                grade.setValue(dto.getValue());
+                dto.getSubject().ifPresent(grade::setSubject);
+                gradeRepository.save(grade);
+                yield new ModelAndView("redirect:/grades");
+            }
             default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         };
     }
