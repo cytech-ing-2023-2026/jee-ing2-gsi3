@@ -39,4 +39,19 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
             nativeQuery = true
     )
     List<Grade> getAllOrdered();
+
+    @Query(
+            value = """
+                    SELECT grades.* FROM grades
+                        INNER JOIN users ON grades.student_id = users.id
+                        INNER JOIN subjects ON grades.subject_id = subjects.id
+                        WHERE grades.student_id = :studentId
+                        ORDER BY
+                            users.last_name ASC,
+                            users.first_name ASC,
+                            subjects.name ASC
+                    """,
+            nativeQuery = true
+    )
+    List<Grade> getAllByStudentOrdered(@Param("studentId") int studentId);
 }

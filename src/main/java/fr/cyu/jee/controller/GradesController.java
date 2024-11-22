@@ -44,7 +44,9 @@ public class GradesController {
             case Teacher teacher -> new ModelAndView("teacher_grades", Map.of(
                     "grades", gradeRepository.getAllBySubjectOrdered(teacher.getSubject().getId())
             ));
-            case Student student -> new ModelAndView("student_grades");
+            case Student student -> new ModelAndView("student_grades", Map.of(
+                    "grades", gradeRepository.getAllByStudentOrdered(student.getId())
+            ));
             default -> throw new AssertionError("Invalid user type ");
         };
     }
