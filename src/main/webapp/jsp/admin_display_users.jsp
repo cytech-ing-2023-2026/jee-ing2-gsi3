@@ -45,13 +45,13 @@
             <td><%= user.getDob() %></td>
             <td>
                 <form action="displayModify" method="post" style="display:inline;">
-                    <input type="hidden" name="userId" value="${user.id}">
+                    <input type="hidden" name="userId" value="<%= user.getId() %>">
                     <button type="submit">Modify</button>
                 </form>
             </td>
             <td>
                 <form action="remove" method="post" style="display:inline;">
-                    <input type="hidden" name="userId" value="${user.id}">
+                    <input type="hidden" name="userId" value="<%= user.getId() %>">
                     <button type="submit">Remove</button>
                 </form>
             </td>

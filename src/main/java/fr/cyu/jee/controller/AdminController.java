@@ -68,13 +68,13 @@ public class AdminController {
 
     @RequestMapping(value = "/display", method = RequestMethod.GET)
     public ModelAndView getDisplayPage() {
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public ModelAndView removeUser(@RequestParam("userId") int userId, HttpSession session, Model model) {
         userService.deleteUserById(userId);
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/displayModify", method = RequestMethod.POST)
@@ -112,7 +112,7 @@ public class AdminController {
 
         userService.updateUser(currentUser);
 
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAll()));
+        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/grades", method = RequestMethod.GET)
