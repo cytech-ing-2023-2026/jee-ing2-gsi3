@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Teacher Grades</title>
+  <title>Grades</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
   <style>
     /* Alignement des champs du formulaire */
@@ -38,9 +38,8 @@
   </style>
 </head>
 <body class="main_body">
-<jsp:include page="banner.jsp">
-  <jsp:param name="title" value="Add a grade"/>
-</jsp:include>
+<% String title = "Grades"; %>
+<%@ include file="banner.jsp" %>
 <div class="centerdiv">
   <div style="display: flex;">
     <!-- Liste des notes à droite -->

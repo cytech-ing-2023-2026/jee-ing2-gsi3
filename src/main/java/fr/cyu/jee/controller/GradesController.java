@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,17 +35,23 @@ public class GradesController {
     SubjectRepository subjectRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView getGrades(HttpSession session) {
+    public ModelAndView getGrades(HttpSession session, @RequestParam(required = false) String error, @RequestParam(required = false) String message) {
         return switch ((User) session.getAttribute("user")) {
             case Admin ignored -> new ModelAndView("teacher_grades", Map.ofEntries(
                     Map.entry("grades", gradeRepository.getAllOrdered()),
-                    Map.entry("subjects", subjectRepository.findAll())
+                    Map.entry("subjects", subjectRepository.findAll()),
+                    Map.entry("error", error == null ? "" : error),
+                    Map.entry("message", message == null ? "" : message)
             ));
-            case Teacher teacher -> new ModelAndView("teacher_grades", Map.of(
-                    "grades", gradeRepository.getAllBySubjectOrdered(teacher.getSubject().getId())
+            case Teacher teacher -> new ModelAndView("teacher_grades", Map.ofEntries(
+                    Map.entry("grades", gradeRepository.getAllBySubjectOrdered(teacher.getSubject().getId())),
+                    Map.entry("error", error == null ? "" : error),
+                    Map.entry("message", message == null ? "" : message)
             ));
-            case Student student -> new ModelAndView("student_grades", Map.of(
-                    "grades", gradeRepository.getAllByStudentOrdered(student.getId())
+            case Student student -> new ModelAndView("student_grades", Map.ofEntries(
+                    Map.entry("grades", gradeRepository.getAllByStudentOrdered(student.getId())),
+                    Map.entry("error", error == null ? "" : error),
+                    Map.entry("message", message == null ? "" : message)
             ));
             default -> throw new AssertionError("Invalid user type ");
         };
@@ -76,7 +83,7 @@ public class GradesController {
                 } else {
                     student.addGrade(teacher.getSubject(), dto.getGrade());
                     userRepository.save(student);
-                    yield new ModelAndView("redirect:/grades", Map.of("message", student.getFirstName() + " " + student.getLastName() + " got the grade " + dto.getGrade() + " in " + teacher.getSubject()));
+                    yield new ModelAndView("redirect:/grades", Map.of("message", student.getFirstName() + " " + student.getLastName() + " got the grade " + dto.getGrade() + " in " + teacher.getSubject().getName()));
                 }
             }
             default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);

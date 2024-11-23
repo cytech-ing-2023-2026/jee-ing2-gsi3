@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teacher Grades</title>
+    <title>Grades</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
     <style>
         /* Alignement des champs du formulaire */
@@ -41,16 +41,12 @@
     </style>
 </head>
 <body class="main_body">
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Add a grade"/>
-</jsp:include>
+<% String title = "Grades"; %>
+<%@ include file="banner.jsp" %>
 <div class="centerdiv">
     <div style="display: flex;">
         <!-- Formulaire à gauche -->
         <div style="flex: 1; padding: 10px; border-right: 1px solid gray;">
-            <c:if test='${pageContext.request.getAttribute("error") != null}'>
-                <label class="error">${pageContext.request.getAttribute("error")}</label>
-            </c:if>
             <form name="addGradesForm" method="post" action="${pageContext.request.contextPath}/grades/add">
                 <div class="form-group">
                     <label for="email">Student Email:</label>
@@ -88,7 +84,8 @@
                     <th>First Name</th>
                     <th>Subject</th>
                     <th>Grade</th>
-                    <th>Date</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
                 </thead>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class CourseController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ModelAndView getCoursePage(HttpSession session, Optional<LocalDate> date) {
+    public ModelAndView getCoursePage(HttpSession session, Optional<LocalDate> date, @RequestParam(required = false) String error, @RequestParam(required = false) String message) {
         // Récupère la date sélectionnée dans les paramètres de requête
         LocalDate selectedDate = date.orElse(LocalDate.now()); // Utilise la date du jour si aucun paramètre n'est fourni
         LocalDate selectedMonday = selectedDate.minusDays(selectedDate.getDayOfWeek().ordinal());
@@ -47,7 +48,9 @@ public class CourseController {
                         Map.entry("courses", courses),
                         Map.entry("subjects", subjects),
                         Map.entry("students", userRepository.findAllByTypeOrdered(UserType.STUDENT)),
-                        Map.entry("teachers", userRepository.findAllByTypeOrdered(UserType.TEACHER))
+                        Map.entry("teachers", userRepository.findAllByTypeOrdered(UserType.TEACHER)),
+                        Map.entry("error", error == null ? "" : error),
+                        Map.entry("message", message == null ? "" : message)
                 ));
             }
             case Teacher teacher -> {
@@ -55,7 +58,9 @@ public class CourseController {
                 yield new ModelAndView("user_course", Map.ofEntries(
                         Map.entry("courses", courses),
                         Map.entry("selectedMonday", selectedMonday),
-                        Map.entry("selectedSunday", selectedSunday)
+                        Map.entry("selectedSunday", selectedSunday),
+                        Map.entry("error", error == null ? "" : error),
+                        Map.entry("message", message == null ? "" : message)
                 ));
             }
             case Student student -> {
@@ -63,7 +68,9 @@ public class CourseController {
                 yield new ModelAndView("user_course", Map.ofEntries(
                         Map.entry("courses", courses),
                         Map.entry("selectedMonday", selectedMonday),
-                        Map.entry("selectedSunday", selectedSunday)
+                        Map.entry("selectedSunday", selectedSunday),
+                        Map.entry("error", error == null ? "" : error),
+                        Map.entry("message", message == null ? "" : message)
                 ));
             }
             default -> throw new AssertionError("Unexpected user");

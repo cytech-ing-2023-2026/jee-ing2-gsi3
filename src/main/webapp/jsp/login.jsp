@@ -7,13 +7,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
 </head>
 <body class="main_body">
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Login"/>
-</jsp:include>
+<% String title = "Login"; %>
+<%@ include file="banner.jsp" %>
 <div class="centerdiv">
-    <c:if test='${pageContext.request.getAttribute("error") != null}'>
-        <label class="error">${pageContext.request.getAttribute("error")}</label>
-    </c:if>
     <form name="loginForm" method="post" action="${pageContext.request.contextPath}/login">
         <input type="hidden" name="redirect" value="${pageContext.request.getParameter("redirect")}">
         <label for="email">Username : </label>
