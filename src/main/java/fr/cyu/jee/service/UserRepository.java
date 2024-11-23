@@ -13,13 +13,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-
-
+    Optional<User> findById(int id);
+    Optional<User> findByEmailAndPassword(String username, String password);
     default <T extends User> Optional<T> findByEmailAndType(String email, UserType type) {
         return (Optional<T>) findByEmail(email).filter(user -> user.getUserType() == type);
     }
-
-    Optional<User> findByEmailAndPassword(String username, String password);
 
     @Query(
             value = """
@@ -33,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     default List<User> findAllByTypeOrdered(UserType type) {
         return findAllByDtypeOrdered(type.getDtype());
     }
+
+    List<User> findAllByOrderByIdAsc();
 }

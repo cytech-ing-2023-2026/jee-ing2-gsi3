@@ -95,41 +95,44 @@
                 <tbody>
                 <%
                     for(Grade grade : (List<Grade>) pageContext.getRequest().getAttribute("grades")) {
+                        String deleteForm = "delete_form_" + grade.getId();
+                        String updateForm = "update_form_" + grade.getId();
                 %>
-                    <tr>
-                        <form id="delete_form" action="${pageContext.request.contextPath}/grades/delete" method="post"></form>
-                        <form id="update_form" action="${pageContext.request.contextPath}/grades/update" method="post"></form>
+                <tr>
+                    <form id="<%= deleteForm %>" action="${pageContext.request.contextPath}/grades/delete" method="post"></form>
+                    <form id="<%= updateForm %>" action="${pageContext.request.contextPath}/grades/update" method="post"></form>
 
-                        <input type="hidden" name="grade" value="<%= grade.getId() %>" form="update_form">
-                        <td><%= grade.getStudent().getLastName().toUpperCase() %></td>
-                        <td><%= grade.getStudent().getFirstName() %></td>
-                        <td>
+                    <input type="hidden" name="grade" value="<%= grade.getId() %>" form="<%= updateForm %>">
+                    <input type="hidden" name="grade" value="<%= grade.getId() %>" form="<%= deleteForm %>">
+
+                    <td><%= grade.getStudent().getLastName().toUpperCase() %></td>
+                    <td><%= grade.getStudent().getFirstName() %></td>
+                    <td>
+                        <%
+                            if(((User)session.getAttribute("user")).getUserType() == UserType.ADMIN) {
+                        %>
+                        <select class="inputarea" id="subject" name="subject" form="<%= updateForm %>" required>
                             <%
-                                if(((User)session.getAttribute("user")).getUserType() == UserType.ADMIN) {
+                                for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
+                                    if(subject.getId() == grade.getSubject().getId()) {
                             %>
-                            <select class="inputarea" id="subject" name="subject" form="update_form" required>
-                                <%
-                                    for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
-                                        if(subject.getId() == grade.getSubject().getId()) {
-                                %>
-                                <option value="<%= subject.getId() %>" selected><%= subject.getName() %></option>
-                                <% } else { %>
-                                <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
-                                <% }} %>
-                            </select>
+                            <option value="<%= subject.getId() %>" selected><%= subject.getName() %></option>
                             <% } else { %>
-                                <%= grade.getSubject().getName() %>
-                            <% } %>
-                        </td>
-                        <td><input class="inputarea" type="number" name="value" step="0.01" min="0" form="update_form" value="<%= grade.getValue() %>" required/></td>
-                        <td><%= grade.getCreatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
-                        <td><%= grade.getUpdatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
-                        <td>
-                            <input type="hidden" name="grade" value="<%= grade.getId() %>" form="delete_form">
-                            <input type="submit" value="delete" form="delete_form">
-                            <input type="submit" value="Update" form="update_form">
-                        </td>
-                    </tr>
+                            <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
+                            <% }} %>
+                        </select>
+                        <% } else { %>
+                        <%= grade.getSubject().getName() %>
+                        <% } %>
+                    </td>
+                    <td><input class="inputarea" type="number" name="value" step="0.01" min="0" form="<%= updateForm %>" value="<%= grade.getValue() %>" required/></td>
+                    <td><%= grade.getCreatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
+                    <td><%= grade.getUpdatedAt().format(CustomDateTimeFormatter.DATE_TIME) %></td>
+                    <td>
+                        <input type="submit" value="delete" form="<%= deleteForm %>">
+                        <input type="submit" value="Update" form="<%= updateForm %>">
+                    </td>
+                </tr>
                 <% } %>
                 </tbody>
             </table>

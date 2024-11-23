@@ -19,7 +19,7 @@
     <div class="buttonDiv" id="admin_users_menu" onclick="window.location.href='${pageContext.request.contextPath}/admin/users'">
       <p>Users</p>
     </div>
-    <div class="buttonDiv" id="admin_planning" onclick="window.location.href='${pageContext.request.contextPath}/admin/planning'">
+    <div class="buttonDiv" id="admin_planning" onclick="window.location.href='${pageContext.request.contextPath}/admin/course'">
       <p>Planning</p>
     </div>
     <div class="buttonDiv" id="admin_grades" onclick="window.location.href='${pageContext.request.contextPath}/admin/grades'">

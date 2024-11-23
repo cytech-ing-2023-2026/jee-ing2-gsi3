@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AddCourseDTO {
 
@@ -34,9 +35,13 @@ public class AddCourseDTO {
         this.beginDate = beginDate;
     }
 
-    public @NotNull Duration getDuration() {
-        String[] hoursAndMinutes = duration.split(":");
-        return Duration.ofHours(Integer.parseInt(hoursAndMinutes[0])).plusMinutes(Integer.parseInt(hoursAndMinutes[1]));
+    public Optional<Duration> getDuration() {
+        try {
+            String[] hoursAndMinutes = duration.trim().split(":");
+            return Optional.of(Duration.ofHours(Integer.parseInt(hoursAndMinutes[0])).plusMinutes(Integer.parseInt(hoursAndMinutes[1])));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     public void setDuration(@NotNull String duration) {

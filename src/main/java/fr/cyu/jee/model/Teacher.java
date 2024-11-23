@@ -13,7 +13,7 @@ public class Teacher extends User {
     @ManyToOne(optional = true)
     private Subject subject;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "teacher")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "teacher", cascade = CascadeType.REMOVE)
     private Set<Course> assignedCourses;
 
     protected Teacher() {

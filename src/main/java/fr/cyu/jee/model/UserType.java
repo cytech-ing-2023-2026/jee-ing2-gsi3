@@ -23,8 +23,4 @@ public enum UserType {
             case STUDENT -> new Student(email, password, firstName, lastName, dob, new HashSet<>(), new HashSet<>());
         };
     }
-
-    public User createUser(String email, String password, String firstName, String lastName, LocalDate dob) {
-        return createUser(email, password, firstName, lastName, dob, null);
-    }
 }

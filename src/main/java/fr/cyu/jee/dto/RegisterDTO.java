@@ -1,5 +1,6 @@
 package fr.cyu.jee.dto;
 
+import fr.cyu.jee.model.Subject;
 import fr.cyu.jee.model.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class RegisterDTO {
 
@@ -32,19 +34,22 @@ public class RegisterDTO {
     @Pattern(regexp = "ADMIN|TEACHER|STUDENT")
     private String userType;
 
+    private Subject subject;
+
     public RegisterDTO() {}
 
-    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, String userType) {
+    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, String userType, Subject subject) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.email = email;
         this.password = password;
         this.userType = userType;
+        this.subject = subject;
     }
 
-    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, UserType userType) {
-        this(firstName, lastName, dob, email, password, userType.name());
+    public RegisterDTO(String firstName, String lastName, LocalDate dob, String email, String password, UserType userType, Subject subject) {
+        this(firstName, lastName, dob, email, password, userType.name(), subject);
     }
 
     public @NotBlank String getFirstName() {
@@ -95,5 +100,11 @@ public class RegisterDTO {
         this.userType = userType;
     }
 
+    public Optional<Subject> getSubject() {
+        return Optional.ofNullable(subject);
+    }
 
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 }

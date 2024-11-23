@@ -1,15 +1,13 @@
 package fr.cyu.jee.controller;
 
-import fr.cyu.jee.dto.RegisterDTO;
 import fr.cyu.jee.dto.AddCourseDTO;
 import fr.cyu.jee.dto.DeleteCourseDTO;
+import fr.cyu.jee.dto.RegisterDTO;
 import fr.cyu.jee.dto.UpdateCourseDTO;
 import fr.cyu.jee.model.Course;
 import fr.cyu.jee.model.Student;
 import fr.cyu.jee.model.User;
 import fr.cyu.jee.service.AuthService;
-import fr.cyu.jee.service.UserRepository;
-import fr.cyu.jee.service.UserService;
 import fr.cyu.jee.service.CourseRepository;
 import fr.cyu.jee.service.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -22,13 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -42,28 +38,23 @@ public class AdminController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private CourseRepository courseRepository;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public String getHomePage(HttpSession session) {
+    public String getHomePage() {
         return "admin_users_menu";
     }
 
     @RequestMapping(value = "/add_users", method = RequestMethod.GET)
-    public String getAddUserPage(HttpSession session) {
+    public String getAddUserPage() {
         return "admin_add_users";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(RegisterDTO registerDTO, HttpSession session, Model model) {
+    public ModelAndView register(RegisterDTO registerDTO) {
         Optional<User> registered = authService.register(registerDTO);
-        if(registered.isPresent()){
-            session.setAttribute("user", registered.get());
-            return "admin_add_users";
-        } else {
-            model.addAttribute("error", "Email is already taken");
-            return "admin_add_users";
-        }
+        if(registered.isPresent()) return new ModelAndView("redirect:/admin/add_users", Map.of("message", "Successfully registered " + registered.get().getEmail()));
+        else return new ModelAndView("redirect:/admin/add_users", Map.of("error", "Email already taken"));
     }
 
     @RequestMapping(value = "/display", method = RequestMethod.GET)
@@ -72,8 +63,16 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public ModelAndView removeUser(@RequestParam("userId") int userId) {
-        userRepository.deleteById(userId);
+    public ModelAndView removeUser(@RequestParam("userId") User user, HttpSession session) {
+        if(user.getId() == ((User) session.getAttribute("user")).getId()) return new ModelAndView("redirect:/admin/display", Map.of("error", "Cannot delete yourself"));
+
+        if(user instanceof Student student) {
+            Set<Course> courses = student.getCourses();
+            courses.forEach(course -> course.getStudents().remove(student));
+            courseRepository.saveAll(courses);
+        }
+
+        userRepository.delete(user);
         return new ModelAndView("redirect:/admin/display", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
@@ -109,10 +108,6 @@ public class AdminController {
         } else {
             throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
         }
-
-        userService.updateUser(currentUser);
-
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/grades", method = RequestMethod.GET)
@@ -120,7 +115,6 @@ public class AdminController {
         if(session.getAttribute("user") == null) return "redirect:/login";
         else {
             return "admin_grades";
-
         }
     }
 
@@ -129,33 +123,30 @@ public class AdminController {
         if(session.getAttribute("user") == null) return "redirect:/login";
         else {
             return "admin_planning";
-
-            User user = (User) session.getAttribute("user");
-            return switch (user.getUserType()) {
-                case ADMIN -> "admin_users_menu";
-                case TEACHER, STUDENT -> "redirect:/home";
-
-            };
         }
     }
 
     @RequestMapping(value = "/course/delete", method = RequestMethod.POST)
     public String deleteCourse(@Validated DeleteCourseDTO dto) {
-        courseRepository.deleteById(dto.getId());
+        courseRepository.delete(dto.getCourse());
         return "redirect:/course";
     }
 
     @RequestMapping(value = "/course/add", method = RequestMethod.POST)
     public ModelAndView addCourse(@Validated AddCourseDTO dto) {
-        courseRepository.save(new Course(dto.getBeginDate(), dto.getDuration(), dto.getSubject(), dto.getTeacher(), new HashSet<>(dto.getStudents())));
+        Optional<Duration> duration = dto.getDuration();
+        if(duration.isEmpty()) return new ModelAndView("redirect:/course", Map.of("error", "Invalid duration"));
+        courseRepository.save(new Course(dto.getBeginDate(), duration.get(), dto.getSubject(), dto.getTeacher(), new HashSet<>(dto.getStudents())));
         return new ModelAndView("redirect:/course", Map.of("message", "Successfully registered course"));
     }
 
     @RequestMapping(value = "/course/update", method = RequestMethod.POST)
     public ModelAndView updateCourse(@Validated UpdateCourseDTO dto) {
+        Optional<Duration> duration = dto.getDuration();
+        if(duration.isEmpty()) return new ModelAndView("redirect:/course", Map.of("error", "Invalid duration"));
         Course course = dto.getCourse();
         course.setBeginDate(dto.getBeginDate());
-        course.setDuration(dto.getDuration());
+        course.setDuration(duration.get());
         course.setSubject(dto.getSubject());
         course.setTeacher(dto.getTeacher());
         course.setStudents(new HashSet<>(dto.getStudents()));

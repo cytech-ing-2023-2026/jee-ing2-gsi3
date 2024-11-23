@@ -25,7 +25,7 @@
         <input type="submit" value="Submit" />
     </form>
     <br>
-    <p>Forgot your password? Click <a href="${pageContext.request.contextPath}/forgotten_password">here</a></p>
+
 </div>
 
 
