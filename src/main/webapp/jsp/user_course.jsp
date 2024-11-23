@@ -12,7 +12,7 @@
     <link href="${pageContext.request.contextPath}/css/course/user.css" rel="stylesheet">
     <!-- Lien vers le fichier CSS spécifique aux cours -->
 </head>
-<body>
+<body class="main_body">
 
 <jsp:include page="banner.jsp">
     <jsp:param name="title" value="Timetable"/>

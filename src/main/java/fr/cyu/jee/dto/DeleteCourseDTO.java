@@ -1,18 +1,18 @@
 package fr.cyu.jee.dto;
 
+import fr.cyu.jee.model.Course;
 import jakarta.validation.constraints.NotNull;
 
 public class DeleteCourseDTO {
 
     @NotNull
-    private int id;
+    private Course course;
 
-    @NotNull
-    public int getId() {
-        return id;
+    public @NotNull Course getCourse() {
+        return course;
     }
 
-    public void setId(@NotNull int id) {
-        this.id = id;
+    public void setCourse(@NotNull Course course) {
+        this.course = course;
     }
 }

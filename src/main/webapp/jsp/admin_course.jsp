@@ -12,10 +12,10 @@
 <html>
 <head>
     <title>Admin - All Courses</title>
-    <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
     <link href="${pageContext.request.contextPath}/css/course/admin.css" rel="stylesheet">
 </head>
-<body>
+<body class="main_body">
 
 <jsp:include page="banner.jsp">
     <jsp:param name="title" value="Admin - All Courses"/>
@@ -30,8 +30,8 @@
                 <input class="inputarea" type="datetime-local" id="begin_date" name="beginDate" required />
             </div>
             <div class="form-group">
-                <label for="duration">Duration:</label>
-                <input class="inputarea" type="time" id="duration" name="duration" min="00:00" value="--:--" required>
+                <label for="duration">Duration (hh:mm):</label>
+                <input class="inputarea" type="text" id="duration" name="duration" min="00:00" required>
             </div>
             <div class="form-group">
                 <label for="subject_add">Subject:</label>
@@ -76,7 +76,7 @@
                 <th>Subject</th>
                 <th>Teacher</th>
                 <th>Begin date</th>
-                <th>Duration</th>
+                <th>Duration (hh:mm)</th>
                 <th>Students</th>
                 <th>Action</th>
             </tr>
@@ -84,16 +84,18 @@
             <tbody>
             <%
                 for(Course course : (List<Course>) pageContext.getRequest().getAttribute("courses")) {
+                    String deleteForm = "delete_form_" + course.getId();
+                    String updateForm = "update_form_" + course.getId();
             %>
             <tr>
-                <form id="delete_form" action="${pageContext.request.contextPath}/admin/course/delete" method="post"></form>
-                <form id="update_form" action="${pageContext.request.contextPath}/admin/course/update" method="post"></form>
+                <form id="<%= deleteForm %>" action="${pageContext.request.contextPath}/admin/course/delete" method="post"></form>
+                <form id="<%= updateForm %>" action="${pageContext.request.contextPath}/admin/course/update" method="post"></form>
 
-                <input type="hidden" name="id" value="<%= course.getId() %>" form="delete_form">
-                <input type="hidden" name="course" value="<%= course.getId() %>" form="update_form">
+                <input type="hidden" name="course" value="<%= course.getId() %>" form="<%= deleteForm %>">
+                <input type="hidden" name="course" value="<%= course.getId() %>" form="<%= updateForm %>">
 
                 <td>
-                    <select class="inputarea" id="subject_update" name="subject" form="update_form" required>
+                    <select class="inputarea" id="subject_update" name="subject" form="<%= updateForm %>" required>
                         <%
                             for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
                                 if(subject.getId() == course.getSubject().getId()) {
@@ -105,7 +107,7 @@
                     </select>
                 </td>
                 <td>
-                    <select class="inputarea" id="teacher_update" name="teacher" form="update_form" required>
+                    <select class="inputarea" id="teacher_update" name="teacher" form="<%= updateForm %>" required>
                         <%
                             for(Teacher teacher : (List<Teacher>) pageContext.getRequest().getAttribute("teachers")) {
                                 if(teacher.getId() == course.getTeacher().getId()) {
@@ -116,8 +118,8 @@
                         <% }} %>
                     </select>
                 </td>
-                <td><input class="inputarea" type="datetime-local" id="begin_date_update" name="beginDate" form="update_form" value="<%= course.getBeginDate().format(CustomDateTimeFormatter.DATE_TIME) %>" required></td>
-                <td><input class="inputarea" type="time" id="duration_update" name="duration" form="update_form" min="00:00" value="<%= CustomDateTimeFormatter.formatDuration(course.getDuration()) %>" required></td>
+                <td><input class="inputarea" type="datetime-local" id="begin_date_update" name="beginDate" form="<%= updateForm %>" value="<%= course.getBeginDate().format(CustomDateTimeFormatter.DATE_TIME) %>" required></td>
+                <td><input class="inputarea" type="text" id="duration_update" name="duration" form="<%= updateForm %>" min="00:00" value="<%= CustomDateTimeFormatter.formatDuration(course.getDuration()) %>" required></td>
                 <td class="students_list">
                     <%
                         for(Student student : (List<Student>) pageContext.getRequest().getAttribute("students")) {
@@ -126,14 +128,14 @@
                     <%
                         if(course.getStudents().contains(student)) {
                     %>
-                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="update_form" checked>
+                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="<%= updateForm %>" checked>
                     <% } else { %>
-                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="update_form">
+                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="<%= updateForm %>">
                     <% }} %>
                 </td>
                 <td>
-                    <input type="submit" value="Delete" form="delete_form">
-                    <input type="submit" value="Update" form="update_form">
+                    <input type="submit" value="Delete" form="<%= deleteForm %>">
+                    <input type="submit" value="Update" form="<%= updateForm %>">
                 </td>
             </tr>
             <% } %>

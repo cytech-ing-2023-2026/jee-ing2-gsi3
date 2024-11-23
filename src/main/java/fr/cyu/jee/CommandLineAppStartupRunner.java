@@ -31,9 +31,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         Subject java = subjectRepository.save(new Subject("Java"));
         subjectRepository.save(new Subject("Statistiques"));
         subjectRepository.save(new Subject("Architecture réseau"));
-        authService.register(new RegisterDTO("Markus", "Persson", LocalDate.of(1979, 6, 1), "notch@minecraft.net", "markus"), UserType.ADMIN);
-        Teacher teacher = (Teacher) authService.register(new RegisterDTO("Markus", "Persson-Teacher", LocalDate.of(1979, 6, 1), "notch_teacher@minecraft.net", "markus"), UserType.TEACHER, java).get();
-        Student student = (Student) authService.register(new RegisterDTO("Markus", "Persson-Student", LocalDate.of(1979, 6, 1), "notch_student@minecraft.net", "markus"), UserType.STUDENT).get();
+        authService.register(new RegisterDTO("Markus", "Persson", LocalDate.of(1979, 6, 1), "notch@minecraft.net", "markus", UserType.ADMIN, null));
+        Teacher teacher = (Teacher) authService.register(new RegisterDTO("Markus", "Persson-Teacher", LocalDate.of(1979, 6, 1), "notch_teacher@minecraft.net", "markus", UserType.TEACHER, java)).get();
+        Student student = (Student) authService.register(new RegisterDTO("Markus", "Persson-Student", LocalDate.of(1979, 6, 1), "notch_student@minecraft.net", "markus", UserType.STUDENT, null)).get();
 
         courseRepository.save(new Course(LocalDateTime.of(2024, 11, 25, 8, 30), Duration.ofHours(3), java, teacher, Set.of(student)));
     }

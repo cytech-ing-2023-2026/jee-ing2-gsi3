@@ -17,17 +17,4 @@ public class HomeController {
             case TEACHER, STUDENT -> "user_menu";
         };
     }
-
-    @RequestMapping(value = "/planning", method = RequestMethod.GET)
-    public String getPlanningPage(HttpSession session) {
-        if(session.getAttribute("user") == null) return "redirect:/login";
-        else {
-            User user = (User) session.getAttribute("user");
-            return switch (user.getUserType()) {
-                case ADMIN -> "admin_planning";
-                case TEACHER -> "teacher_planning";
-                case STUDENT -> "student_planning";
-            };
-        }
-    }
 }

@@ -25,11 +25,6 @@ public class AuthController {
         return "login";
     }
 
-    @RequestMapping(value="/register", method = RequestMethod.GET)
-    public String getRegisterPage(){
-        return "register";
-    }
-
     @RequestMapping(value="/forgotten_password", method = RequestMethod.GET)
     public String getForgottenPasswordPage(){
         return "forgotten_password";
@@ -47,15 +42,6 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(RegisterDTO registerDTO, HttpSession session, Model model) {
-        Optional<User> registered = authService.register(registerDTO, UserType.STUDENT);
-        if(registered.isPresent()){
-            session.setAttribute("user", registered.get());
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Email is already taken");
-            return "register";
-        }
-    }
+
+
 }
