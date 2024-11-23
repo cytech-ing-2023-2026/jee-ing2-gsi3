@@ -25,11 +25,6 @@ public class AuthController {
         return "login";
     }
 
-    @RequestMapping(value="/forgotten_password", method = RequestMethod.GET)
-    public String getForgottenPasswordPage(){
-        return "forgotten_password";
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(LoginDTO loginDTO, HttpSession session, Model model) {
         Optional<User> loggedIn = authService.authenticate(loginDTO);

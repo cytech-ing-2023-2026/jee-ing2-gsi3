@@ -11,15 +11,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - All Courses</title>
+    <title>All Courses</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
     <link href="${pageContext.request.contextPath}/css/course/admin.css" rel="stylesheet">
 </head>
 <body class="main_body">
 
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Admin - All Courses"/>
-</jsp:include>
+<% String title = "All courses"; %>
+<%@ include file="banner.jsp" %>
 
 <div style="display: flex;">
     <!-- Formulaire à gauche -->

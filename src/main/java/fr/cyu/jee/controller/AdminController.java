@@ -41,13 +41,19 @@ public class AdminController {
     private CourseRepository courseRepository;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public String getHomePage() {
-        return "admin_users_menu";
+    public ModelAndView getHomePage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+        return new ModelAndView("admin_users_menu", Map.ofEntries(
+            Map.entry("error", error == null ? "" : error),
+            Map.entry("message", message == null ? "" : message)
+        ));
     }
 
     @RequestMapping(value = "/add_users", method = RequestMethod.GET)
-    public String getAddUserPage() {
-        return "admin_add_users";
+    public ModelAndView getAddUserPage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+        return new ModelAndView("admin_add_users", Map.ofEntries(
+            Map.entry("error", error == null ? "" : error),
+            Map.entry("message", message == null ? "" : message)
+        ));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -58,8 +64,12 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/display", method = RequestMethod.GET)
-    public ModelAndView getDisplayPage() {
-        return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
+    public ModelAndView getDisplayPage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+        return new ModelAndView("admin_display_users", Map.ofEntries(
+                Map.entry("users", userRepository.findAllByOrderByIdAsc()),
+                Map.entry("error", error == null ? "" : error),
+                Map.entry("message", message == null ? "" : message)
+        ));
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
@@ -73,7 +83,7 @@ public class AdminController {
         }
 
         userRepository.delete(user);
-        return new ModelAndView("redirect:/admin/display", Map.of("users", userRepository.findAllByOrderByIdAsc()));
+        return new ModelAndView("redirect:/admin/display", Map.of("message", "Successfully deleted user"));
     }
 
     @RequestMapping(value = "/displayModify", method = RequestMethod.POST)
@@ -104,9 +114,9 @@ public class AdminController {
 
             userRepository.save(currentUser);
 
-            return new ModelAndView("admin_display_users", Map.of("users", userRepository.findAllByOrderByIdAsc()));
+            return new ModelAndView("redirect:/admin/display", Map.of("message", "Successfully updated user"));
         } else {
-            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
+            return new ModelAndView("redirect:/admin/display", Map.of("error", "User with ID " + userId + " does not exist."));
         }
     }
 
@@ -115,14 +125,6 @@ public class AdminController {
         if(session.getAttribute("user") == null) return "redirect:/login";
         else {
             return "admin_grades";
-        }
-    }
-
-    @RequestMapping(value = "/planning", method = RequestMethod.GET)
-    public String getPlanningPage(HttpSession session) {
-        if(session.getAttribute("user") == null) return "redirect:/login";
-        else {
-            return "admin_planning";
         }
     }
 

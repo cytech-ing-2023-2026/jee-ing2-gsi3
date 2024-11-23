@@ -6,13 +6,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login page</title>
+    <title>List of users</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
 </head>
 <body class="main_body">
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="List of users"/>
-</jsp:include>
+<% String title = "List of users"; %>
+<%@ include file="banner.jsp" %>
 <div class="centerdiv">
     <c:if test='${pageContext.request.getAttribute("error") != null}'>
         <label class="error">${pageContext.request.getAttribute("error")}</label>

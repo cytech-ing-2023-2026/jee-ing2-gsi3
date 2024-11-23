@@ -14,9 +14,8 @@
 </head>
 <body class="main_body">
 
-<jsp:include page="banner.jsp">
-    <jsp:param name="title" value="Timetable"/>
-</jsp:include>
+<% String title = "Timetable"; %>
+<%@ include file="banner.jsp" %>
 
 <%
     LocalDate selectedMonday = (LocalDate) request.getAttribute("selectedMonday");
