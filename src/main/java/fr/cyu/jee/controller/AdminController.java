@@ -74,15 +74,15 @@ public class AdminController {
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public ModelAndView removeUser(@RequestParam("userId") int userId) {
         userRepository.deleteById(userId);
-        return new ModelAndView("redirect:/display", Map.of("users", userRepository.findAllByOrderByIdAsc()));
+        return new ModelAndView("redirect:/admin/display", Map.of("users", userRepository.findAllByOrderByIdAsc()));
     }
 
     @RequestMapping(value = "/displayModify", method = RequestMethod.POST)
     public ModelAndView displayModifyUser(@RequestParam("userId") int userId) {
         // Fetch user by ID
         Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()) return new ModelAndView("admin_display_users", Map.of("user", user.get(), "users", userRepository.findAllByOrderByIdAsc()));
-        else return new ModelAndView("redirect:/display", Map.of("error", "Unknown user with id " + userId));
+        if(user.isPresent()) return new ModelAndView("admin_modify_users", Map.of("user", user.get(), "users", userRepository.findAllByOrderByIdAsc()));
+        else return new ModelAndView("redirect:/admin/display", Map.of("error", "Unknown user with id " + userId, "users", userRepository.findAllByOrderByIdAsc() ));
     }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
