@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -24,14 +25,22 @@ public class Course {
     @ManyToOne(optional = false)
     private Teacher teacher;
 
+    @ManyToMany
+    @JoinTable(name="students_courses",
+            joinColumns=@JoinColumn(name="course_id"),
+            inverseJoinColumns=@JoinColumn(name="student_id")
+    )
+    private Set<Student> students;
+
     protected Course() {
     }
 
-    public Course(LocalDateTime beginDate, Duration duration, Subject subject, Teacher teacher) {
+    public Course(LocalDateTime beginDate, Duration duration, Subject subject, Teacher teacher, Set<Student> students) {
         this.beginDate = beginDate;
         this.duration = duration;
         this.subject = subject;
         this.teacher = teacher;
+        this.students = students;
     }
 
     public int getId() {
@@ -59,6 +68,10 @@ public class Course {
         this.duration = duration;
     }
 
+    public LocalDateTime getEndDate() {
+        return beginDate.plus(duration);
+    }
+
     public Subject getSubject() {
         return subject;
     }
@@ -73,5 +86,13 @@ public class Course {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 }
