@@ -1,29 +1,27 @@
-.course-list {
-    margin: 20px;
-}
-
-.subject-section {
-    margin-bottom: 30px;
-}
-
-.subject-title {
-    font-size: 1.5em;
-    color: #333;
+/* Alignement des champs du formulaire */
+.form-group {
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
 }
-
-.course-table {
+.form-group label {
+    flex: 0 0 150px; /* Largeur fixe pour aligner les étiquettes 0 0 150 est le juste milieu ! */
+    text-align: right;
+    margin-right: 10px;
+}
+.form-group input {
+    flex: 1;
+}
+.courses-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
-
-.course-table th, .course-table td {
-    border: 1px solid #ddd;
+.courses-table th, .courses-table td {
+    border: 1px solid black;
     padding: 8px;
     text-align: center;
 }
-
-.course-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+.courses-table th {
+    background-color: #f2f2f2;
 }

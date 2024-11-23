@@ -32,4 +32,16 @@ public class Teacher extends User {
     public Subject getSubject() {
         return subject;
     }
+
+    public String getFirstName() {
+        return super.getFirstName(); // Accès à la méthode héritée de User
+    }
+
+    public String getLastName() {
+        return super.getLastName(); // Accès à la méthode héritée de User
+    }
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName().toUpperCase();
+    }
 }

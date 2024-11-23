@@ -13,11 +13,7 @@ public class Student extends User {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Grade> grades;
 
-    @ManyToMany
-    @JoinTable(name="students_courses",
-            joinColumns=@JoinColumn(name="student_id"),
-            inverseJoinColumns=@JoinColumn(name="course_id")
-    )
+    @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 
     protected Student() {}
@@ -43,8 +39,16 @@ public class Student extends User {
     public Set<Course> getCourses() {
         return courses;
     }
-
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+    public String getLastName() {
+        return super.getLastName();
+    }
+    public String getFullName() {
+        return getFirstName() + " " + getLastName().toUpperCase();
     }
 }

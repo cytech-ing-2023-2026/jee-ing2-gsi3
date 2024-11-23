@@ -2,6 +2,8 @@ package fr.cyu.jee.controller;
 
 import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.CourseRepository;
+import fr.cyu.jee.service.SubjectRepository;
+import fr.cyu.jee.service.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,11 @@ public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView getCoursePage(HttpSession session, Optional<LocalDate> date) {
         // Récupère la date sélectionnée dans les paramètres de requête
@@ -32,7 +39,16 @@ public class CourseController {
                 List<Course> courses = new ArrayList<>();
                 coursesIt.forEach(courses::add);
 
-                yield new ModelAndView("admin_course", Map.of("courses", courses));
+                Iterable<Subject> subjectsIt = subjectRepository.findAll();
+                List<Subject> subjects = new ArrayList<>();
+                subjectsIt.forEach(subjects::add);
+
+                yield new ModelAndView("admin_course", Map.ofEntries(
+                        Map.entry("courses", courses),
+                        Map.entry("subjects", subjects),
+                        Map.entry("students", userRepository.findAllByTypeOrdered(UserType.STUDENT)),
+                        Map.entry("teachers", userRepository.findAllByTypeOrdered(UserType.TEACHER))
+                ));
             }
             case Teacher teacher -> {
                 Set<Course> courses = courseRepository.getTeacherCourses(teacher.getId(), selectedMonday, selectedSunday);

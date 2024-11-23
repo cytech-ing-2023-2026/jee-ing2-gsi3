@@ -3,6 +3,10 @@
 <%@ page import="java.util.Map, java.util.List, java.util.stream.Collectors" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="fr.cyu.jee.model.Subject" %>
+<%@ page import="fr.cyu.jee.model.Teacher" %>
+<%@ page import="fr.cyu.jee.model.Student" %>
+<%@ page import="fr.cyu.jee.CustomDateTimeFormatter" %>
 
 <!DOCTYPE html>
 <html>
@@ -17,73 +21,125 @@
     <jsp:param name="title" value="Admin - All Courses"/>
 </jsp:include>
 
-<%
-    List<Course> courses = (List<Course>) request.getAttribute("courses");
+<div style="display: flex;">
+    <!-- Formulaire à gauche -->
+    <div style="flex: 1; padding: 10px; border-right: 1px solid gray;">
+        <form name="add_courses" method="post" action="${pageContext.request.contextPath}/admin/course/add">
+            <div class="form-group">
+                <label for="begin_date">Begin date:</label>
+                <input class="inputarea" type="datetime-local" id="begin_date" name="beginDate" required />
+            </div>
+            <div class="form-group">
+                <label for="duration">Duration:</label>
+                <input class="inputarea" type="time" id="duration" name="duration" min="00:00" value="--:--" required>
+            </div>
+            <div class="form-group">
+                <label for="subject_add">Subject:</label>
+                <select class="inputarea" id="subject_add" name="subject" required>
+                    <%
+                        for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
+                    %>
+                    <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="teacher_add">Teacher:</label>
+                <select class="inputarea" id="teacher_add" name="teacher" required>
+                    <%
+                        for(Teacher teacher : (List<Teacher>) pageContext.getRequest().getAttribute("teachers")) {
+                    %>
+                    <option value="<%= teacher.getId() %>"><%= teacher.getEmail() %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="students_add">Students:</label>
+                <div class="inputarea" id="students_add">
+                    <%
+                        for(Student student : (List<Student>) pageContext.getRequest().getAttribute("students")) {
+                    %>
+                    <label><%= student.getEmail() %></label><input type="checkbox" name="students" value="<%= student.getId() %>">
+                    <% } %>
+                </div>
+            </div>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
 
-    if (courses == null) {
-        courses = new ArrayList<>();
-    }
-
-    // Grouper les cours par matière si la liste n'est pas vide
-    Map<String, List<Course>> coursesBySubject = courses.isEmpty() ? Map.of() :
-            courses.stream().collect(Collectors.groupingBy(course -> course.getSubject().getName()));
-
-    // Formatter pour l'affichage des horaires
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-%>
-
-<div class="course-list">
-    <h1>All Courses</h1>
-
-    <% if (coursesBySubject != null && !coursesBySubject.isEmpty()) { %>
-    <!-- Parcourir les matières -->
-    <% for (Map.Entry<String, List<Course>> entry : coursesBySubject.entrySet()) { %>
-    <div class="subject-section">
-        <h2 class="subject-title"><%= entry.getKey() %></h2> <!-- Nom de la matière -->
-
-        <!-- Parcourir les cours de la matière -->
-        <table class="course-table">
+    <!-- Liste des notes à droite -->
+    <div style="flex: 2; padding: 10px;">
+        <h2>All courses</h2>
+        <table class="courses-table">
             <thead>
             <tr>
-                <th>Course Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Professor</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Begin date</th>
                 <th>Duration</th>
-                <th>Actions</th>
+                <th>Students</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <% for (Course course : entry.getValue()) { %>
+            <%
+                for(Course course : (List<Course>) pageContext.getRequest().getAttribute("courses")) {
+            %>
             <tr>
-                <td><%= course.getBeginDate().toLocalDate().format(dateFormatter) %></td>
-                <td><%= course.getBeginDate().toLocalTime().format(timeFormatter) %></td>
-                <td><%= course.getEndDate().toLocalTime().format(timeFormatter) %></td>
-                <td>
-                    <%= course.getTeacher().getFirstName() %> <%= course.getTeacher().getLastName().toUpperCase() %>
-                </td>
-                <td><%= course.getDuration().toHours() %>h <%= course.getDuration().toMinutesPart() %>min</td>
-                <td>
-                    <form action="${pageContext.request.contextPath}/admin/course/delete" method="post" style="display: inline;">
-                        <input type="hidden" name="id" value="<%= course.getId() %>">
-                        <button type="submit" class="btn-delete">Delete</button>
-                    </form>
+                <form id="delete_form" action="${pageContext.request.contextPath}/admin/course/delete" method="post"></form>
+                <form id="update_form" action="${pageContext.request.contextPath}/admin/course/update" method="post"></form>
 
-                    <form action="${pageContext.request.contextPath}/admin/course/edit" method="get" style="display: inline;">
-                        <input type="hidden" name="courseId" value="<%= course.getId() %>">
-                        <button type="submit" class="btn-edit">Edit</button>
-                    </form>
+                <input type="hidden" name="id" value="<%= course.getId() %>" form="delete_form">
+                <input type="hidden" name="course" value="<%= course.getId() %>" form="update_form">
+
+                <td>
+                    <select class="inputarea" id="subject_update" name="subject" form="update_form" required>
+                        <%
+                            for(Subject subject : (List<Subject>) pageContext.getRequest().getAttribute("subjects")) {
+                                if(subject.getId() == course.getSubject().getId()) {
+                        %>
+                        <option value="<%= subject.getId() %>" selected><%= subject.getName() %></option>
+                        <% } else { %>
+                        <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
+                        <% }} %>
+                    </select>
+                </td>
+                <td>
+                    <select class="inputarea" id="teacher_update" name="teacher" form="update_form" required>
+                        <%
+                            for(Teacher teacher : (List<Teacher>) pageContext.getRequest().getAttribute("teachers")) {
+                                if(teacher.getId() == course.getTeacher().getId()) {
+                        %>
+                        <option value="<%= teacher.getId() %>" selected><%= teacher.getEmail() %></option>
+                        <% } else { %>
+                        <option value="<%= teacher.getId() %>"><%= teacher.getEmail() %></option>
+                        <% }} %>
+                    </select>
+                </td>
+                <td><input class="inputarea" type="datetime-local" id="begin_date_update" name="beginDate" form="update_form" value="<%= course.getBeginDate().format(CustomDateTimeFormatter.DATE_TIME) %>" required></td>
+                <td><input class="inputarea" type="time" id="duration_update" name="duration" form="update_form" min="00:00" value="<%= CustomDateTimeFormatter.formatDuration(course.getDuration()) %>" required></td>
+                <td class="students_list">
+                    <%
+                        for(Student student : (List<Student>) pageContext.getRequest().getAttribute("students")) {
+                    %>
+                    <label><%= student.getEmail() %></label>
+                    <%
+                        if(course.getStudents().contains(student)) {
+                    %>
+                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="update_form" checked>
+                    <% } else { %>
+                    <input class="inputarea" type="checkbox" name="students" value="<%= student.getId() %>" form="update_form">
+                    <% }} %>
+                </td>
+                <td>
+                    <input type="submit" value="Delete" form="delete_form">
+                    <input type="submit" value="Update" form="update_form">
                 </td>
             </tr>
             <% } %>
             </tbody>
         </table>
     </div>
-    <% } %>
-    <% } else { %>
-    <p>No courses available.</p>
-    <% } %>
 </div>
 </body>
 </html>
