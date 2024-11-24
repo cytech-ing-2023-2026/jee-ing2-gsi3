@@ -7,6 +7,10 @@
 <head>
   <title>Grades</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jspdf-autotable@latest/dist/jspdf.plugin.autotable.js"></script>
+  <script src="${pageContext.request.contextPath}/js/student_grades.js"></script>
   <style>
     /* Alignement des champs du formulaire */
     .form-group {
@@ -44,8 +48,9 @@
   <div style="display: flex;">
     <!-- Liste des notes à droite -->
     <div style="flex: 2; padding: 10px;">
-      <h2>Student Grades</h2>
-      <table class="grades-table">
+      <h2 id="grades_title">Student Grades</h2>
+      <button onclick="saveAsPDF('${sessionScope.user.firstName}', '${sessionScope.user.lastName}')">Download PDF</button>
+      <table id="grades_container" class="grades-table">
         <thead>
         <tr>
           <th>Subject</th>

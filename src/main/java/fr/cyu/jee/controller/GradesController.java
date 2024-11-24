@@ -71,7 +71,7 @@ public class GradesController {
                 if(dto.getSubject().isPresent()) {
                     student.addGrade(dto.getSubject().get(), dto.getGrade());
                     userRepository.save(student);
-                    yield new ModelAndView("redirect:/grades", Map.of("message", student.getFirstName() + " " + student.getLastName() + " got the grade " + dto.getGrade() + " in " + dto.getSubject().get()));
+                    yield new ModelAndView("redirect:/grades", Map.of("message", student.getFirstName() + " " + student.getLastName() + " got the grade " + dto.getGrade() + " in " + dto.getSubject().get().getName()));
                 } else {
                     yield new ModelAndView("redirect:/grades", Map.of("error", "You must define a subject for this grade"));
                 }

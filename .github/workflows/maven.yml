@@ -19,6 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Set up PostgreSQL
+      uses: ikalnytskyi/action-setup-postgres@v7
+      with:
+        username: postgres
+        password: postgres
+        database: jee
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:

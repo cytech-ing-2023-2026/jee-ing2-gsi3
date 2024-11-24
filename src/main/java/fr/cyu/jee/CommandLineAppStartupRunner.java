@@ -4,6 +4,7 @@ import fr.cyu.jee.dto.RegisterDTO;
 import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.AuthService;
 import fr.cyu.jee.service.CourseRepository;
+import fr.cyu.jee.service.GradeRepository;
 import fr.cyu.jee.service.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,6 +27,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private GradeRepository gradeRepository;
+
     @Override
     public void run(String...args) {
         Subject java = subjectRepository.save(new Subject("Java"));
@@ -36,5 +40,6 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         Student student = (Student) authService.register(new RegisterDTO("Markus", "Persson-Student", LocalDate.of(1979, 6, 1), "notch_student@minecraft.net", "markus", UserType.STUDENT, null)).get();
 
         courseRepository.save(new Course(LocalDateTime.of(2024, 11, 25, 8, 30), Duration.ofHours(3), java, teacher, Set.of(student)));
+        gradeRepository.save(new Grade(java, student, 15));
     }
 }
