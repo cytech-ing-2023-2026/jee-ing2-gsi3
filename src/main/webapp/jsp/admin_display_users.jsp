@@ -13,10 +13,6 @@
 <% String title = "List of users"; %>
 <%@ include file="banner.jsp" %>
 <div class="centerdiv">
-    <c:if test='${pageContext.request.getAttribute("error") != null}'>
-        <label class="error">${pageContext.request.getAttribute("error")}</label>
-    </c:if>
-
     <table>
         <thead>
             <tr>

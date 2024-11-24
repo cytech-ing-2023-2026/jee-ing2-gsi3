@@ -108,6 +108,9 @@ public class AdminController {
 
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
+
+            if(!email.equals(currentUser.getEmail()) && userRepository.findByEmail(email).isPresent())
+                return new ModelAndView("redirect:/admin/display", Map.of("error", "This email is already taken"));
             currentUser.setEmail(email);
             currentUser.setPassword(password);
             currentUser.setDob(dob);

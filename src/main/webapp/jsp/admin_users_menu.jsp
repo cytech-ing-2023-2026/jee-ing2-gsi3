@@ -10,10 +10,6 @@
 <% String title = "Users"; %>
 <%@ include file="banner.jsp" %>
 <div class="centerdiv">
-    <c:if test='${pageContext.request.getAttribute("error") != null}'>
-        <label class="error">${pageContext.request.getAttribute("error")}</label>
-    </c:if>
-
     <div class="buttonDivContainer">
         <div class="buttonDiv" id="addUser" onclick="window.location.href='${pageContext.request.contextPath}/admin/add_users'">
             <p>Add a user</p>
