@@ -24,6 +24,7 @@ public class CourseController {
 
     @Autowired
     private SubjectRepository subjectRepository;
+
     @Autowired
     private UserRepository userRepository;
 

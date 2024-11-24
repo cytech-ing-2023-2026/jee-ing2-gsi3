@@ -13,7 +13,7 @@ public class AppConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         //TODO Add other endpoints
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns(
-                "/home",
+                "/",
                 "/course",
                 "/grades",
                 "/grades/**"
