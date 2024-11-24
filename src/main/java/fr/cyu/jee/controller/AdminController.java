@@ -40,12 +40,6 @@ public class AdminController {
     @Autowired
     private CourseRepository courseRepository;
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(HttpSession session) {
-        session.setAttribute("user", null);
-        return "login";
-    }
-
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ModelAndView getHomePage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
         return new ModelAndView("admin_users_menu", Map.ofEntries(

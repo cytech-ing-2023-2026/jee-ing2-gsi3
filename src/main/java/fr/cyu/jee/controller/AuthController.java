@@ -33,7 +33,7 @@ public class AuthController {
             return "redirect:" + loginDTO.getRedirectOrHome();
         } else {
             model.addAttribute("error", "Invalid email or password");
-            return "login";
+            return "redirect:/login";
         }
     }
 
