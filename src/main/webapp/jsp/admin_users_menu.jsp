@@ -15,10 +15,7 @@
             <p>Add a user</p>
         </div>
         <div class="buttonDiv" id="displayUser" onclick="window.location.href='${pageContext.request.contextPath}/admin/display'">
-            <p>Modify or delete a user</p>
-        </div>
-        <div class="buttonDiv" id="searchUser" onclick="window.location.href='${pageContext.request.contextPath}/'">
-            <p>Search for a user</p>
+            <p>List of users</p>
         </div>
 
     </div>

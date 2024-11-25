@@ -1,9 +1,6 @@
 package fr.cyu.jee.controller;
 
-import fr.cyu.jee.dto.AddCourseDTO;
-import fr.cyu.jee.dto.DeleteCourseDTO;
-import fr.cyu.jee.dto.RegisterDTO;
-import fr.cyu.jee.dto.UpdateCourseDTO;
+import fr.cyu.jee.dto.*;
 import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.AuthService;
 import fr.cyu.jee.service.CourseRepository;
@@ -70,9 +67,29 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/display", method = RequestMethod.GET)
-    public ModelAndView getDisplayPage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+    public ModelAndView getDisplayPage(SearchDTO dto, @RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+
         return new ModelAndView("admin_display_users", Map.ofEntries(
-                Map.entry("users", userRepository.findAllByOrderByIdAsc()),
+                Map.entry("users", userRepository
+                        .findAllByOrderByIdAsc()
+                        .stream()
+                        .filter(dto::check)
+                        .toList()
+                ),
+                Map.entry("error", error == null ? "" : error),
+                Map.entry("message", message == null ? "" : message)
+        ));
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public ModelAndView getDisplayWithSearchPage(SearchDTO dto, @RequestParam(required = false) String error, @RequestParam(required = false) String message){
+        return new ModelAndView("admin_display_users", Map.ofEntries(
+                Map.entry("users", userRepository
+                        .findAllByOrderByIdAsc()
+                        .stream()
+                        .filter(dto::check)
+                        .toList()
+                ),
                 Map.entry("error", error == null ? "" : error),
                 Map.entry("message", message == null ? "" : message)
         ));
