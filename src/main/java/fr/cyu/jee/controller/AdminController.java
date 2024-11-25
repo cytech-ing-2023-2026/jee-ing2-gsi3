@@ -4,11 +4,10 @@ import fr.cyu.jee.dto.AddCourseDTO;
 import fr.cyu.jee.dto.DeleteCourseDTO;
 import fr.cyu.jee.dto.RegisterDTO;
 import fr.cyu.jee.dto.UpdateCourseDTO;
-import fr.cyu.jee.model.Course;
-import fr.cyu.jee.model.Student;
-import fr.cyu.jee.model.User;
+import fr.cyu.jee.model.*;
 import fr.cyu.jee.service.AuthService;
 import fr.cyu.jee.service.CourseRepository;
+import fr.cyu.jee.service.SubjectRepository;
 import fr.cyu.jee.service.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,6 +36,9 @@ public class AdminController {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private SubjectRepository subjectRepository;
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ModelAndView getHomePage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
         return new ModelAndView("admin_users_menu", Map.ofEntries(
@@ -50,14 +49,21 @@ public class AdminController {
 
     @RequestMapping(value = "/add_users", method = RequestMethod.GET)
     public ModelAndView getAddUserPage(@RequestParam(required = false) String error, @RequestParam(required = false) String message) {
+        Iterable<Subject> subjectsIt = subjectRepository.findAll();
+        List<Subject> subjects = new ArrayList<>();
+        subjectsIt.forEach(subjects::add);
+
         return new ModelAndView("admin_add_users", Map.ofEntries(
             Map.entry("error", error == null ? "" : error),
-            Map.entry("message", message == null ? "" : message)
+            Map.entry("message", message == null ? "" : message),
+            Map.entry("subjects", subjects)
         ));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(RegisterDTO registerDTO) {
+        if(registerDTO.getUserType() == UserType.TEACHER && registerDTO.getSubject().isEmpty())
+            return new ModelAndView("redirect:/admin/add_users", Map.of("error", "A teacher must have an assigned subject"));
         Optional<User> registered = authService.register(registerDTO);
         if(registered.isPresent()) return new ModelAndView("redirect:/admin/add_users", Map.of("message", "Successfully registered " + registered.get().getEmail()));
         else return new ModelAndView("redirect:/admin/add_users", Map.of("error", "Email already taken"));
@@ -90,7 +96,12 @@ public class AdminController {
     public ModelAndView displayModifyUser(@RequestParam("userId") int userId) {
         // Fetch user by ID
         Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()) return new ModelAndView("admin_modify_users", Map.of("user", user.get(), "users", userRepository.findAllByOrderByIdAsc()));
+        if(user.isPresent()) {
+            Iterable<Subject> subjectsIt = subjectRepository.findAll();
+            List<Subject> subjects = new ArrayList<>();
+            subjectsIt.forEach(subjects::add);
+            return new ModelAndView("admin_modify_users", Map.of("user", user.get(), "users", userRepository.findAllByOrderByIdAsc(), "subjects", subjects));
+        }
         else return new ModelAndView("redirect:/admin/display", Map.of("error", "Unknown user with id " + userId, "users", userRepository.findAllByOrderByIdAsc() ));
     }
 
@@ -100,11 +111,15 @@ public class AdminController {
                                    @RequestParam("lastName") String lastName,
                                    @RequestParam("dob") LocalDate dob,
                                    @RequestParam("password") String password,
-                                   @RequestParam("email") String email) {
+                                   @RequestParam("email") String email,
+                                   @RequestParam(value = "subject", required = false) Subject subject) {
 
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             User currentUser = user.get();
+
+            if(currentUser.getUserType() == UserType.TEACHER && subject == null)
+                return new ModelAndView("redirect:/admin/display", Map.of("error", "Teacher must have a subject"));
 
             currentUser.setFirstName(firstName);
             currentUser.setLastName(lastName);
@@ -114,6 +129,7 @@ public class AdminController {
             currentUser.setEmail(email);
             currentUser.setPassword(password);
             currentUser.setDob(dob);
+            if(currentUser.getUserType() == UserType.TEACHER) ((Teacher) currentUser).setSubject(subject);
 
             userRepository.save(currentUser);
 
