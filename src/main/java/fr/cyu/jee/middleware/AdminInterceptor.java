@@ -17,6 +17,6 @@ public class AdminInterceptor implements HandlerInterceptor {
             response.sendRedirect("/login");
             return false;
         } else if(user.getUserType() == UserType.ADMIN) return true;
-        else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        else throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 }

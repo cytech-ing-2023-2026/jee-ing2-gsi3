@@ -15,8 +15,8 @@
     </c:if>
 
     <div class="buttonDivContainer">
-        <div class="buttonDiv" id="planning"  onclick="window.location.href='${pageContext.request.contextPath}/planning'">
-            <p>Planning</p>
+        <div class="buttonDiv" id="planning"  onclick="window.location.href='${pageContext.request.contextPath}/course'">
+            <p>Courses</p>
         </div>
         <div class="buttonDiv" id="gradesStudent"  onclick="window.location.href='${pageContext.request.contextPath}/grades'">
             <p>Grades</p>

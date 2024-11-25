@@ -123,14 +123,6 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/grades", method = RequestMethod.GET)
-    public String getGradesPage(HttpSession session) {
-        if(session.getAttribute("user") == null) return "redirect:/login";
-        else {
-            return "admin_grades";
-        }
-    }
-
     @RequestMapping(value = "/course/delete", method = RequestMethod.POST)
     public String deleteCourse(@Validated DeleteCourseDTO dto) {
         courseRepository.delete(dto.getCourse());

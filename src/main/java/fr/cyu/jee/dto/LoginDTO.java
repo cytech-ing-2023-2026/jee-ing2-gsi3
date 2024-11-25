@@ -43,6 +43,6 @@ public class LoginDTO {
     }
 
     public String getRedirectOrHome() {
-        return redirect.isPresent() && !redirect.get().isBlank() ? redirect.get() : "/home";
+        return redirect.isPresent() && !redirect.get().isBlank() ? redirect.get() : "";
     }
 }

@@ -33,16 +33,14 @@ public class AuthController {
             return "redirect:" + loginDTO.getRedirectOrHome();
         } else {
             model.addAttribute("error", "Invalid email or password");
-            return "redirect:/login";
+            return "login";
         }
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
         session.setAttribute("user", null);
-        return "login";
+        return "redirect:/login";
     }
-
-
 
 }
