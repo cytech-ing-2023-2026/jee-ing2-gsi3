@@ -1,10 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="fr.cyu.jee.model.Subject" %>
+<%@ page import="fr.cyu.jee.model.Teacher" %>
+<%@ page import="fr.cyu.jee.model.User" %>
+<%@ page import="fr.cyu.jee.model.UserType" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Modify a user</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css" />
+    <script src="${pageContext.request.contextPath}/js/admin_add_users.js"></script>
 </head>
 <body class="main_body">
 <% String title = "Modify a user"; %>
@@ -27,6 +33,23 @@
         <br>
         <label for="password">Password : </label>
         <input class="inputarea" type="password" id="password" name="password" value="${user.password}"/> <br/>
+        <br>
+        <%
+            User usr = (User) request.getAttribute("user");
+            if(usr.getUserType() == UserType.TEACHER) {
+        %>
+        <label for="subject">Subject:</label>
+        <select id="subject" name="subject">
+            <%
+                for(Subject subject : (List<Subject>) request.getAttribute("subjects")) {
+                    if(((Teacher) usr).getSubject().getId() == subject.getId()) {
+            %>
+            <option value="<%= subject.getId() %>" selected><%= subject.getName() %></option>
+            <% } else { %>
+            <option value="<%= subject.getId() %>"><%= subject.getName() %></option>
+            <% }} %>
+        </select>
+        <% } %>
         <br>
         <br>
         <input type="submit" value="Submit"/>

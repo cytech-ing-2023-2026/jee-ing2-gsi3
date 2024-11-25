@@ -33,6 +33,10 @@ public class Teacher extends User {
         return subject;
     }
 
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
     public String getFirstName() {
         return super.getFirstName(); // Accès à la méthode héritée de User
     }

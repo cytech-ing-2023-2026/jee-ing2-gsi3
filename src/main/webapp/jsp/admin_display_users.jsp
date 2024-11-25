@@ -1,3 +1,4 @@
+<%@ page import="fr.cyu.jee.model.Teacher" %>
 <%@ page import="fr.cyu.jee.model.User" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -22,6 +23,7 @@
                 <th>Last name</th>
                 <th>Email</th>
                 <th>Date of Birth</th>
+                <th>Subject</th>
                 <th>Modify</th>
                 <th>Remove</th>
             </tr>
@@ -38,6 +40,15 @@
             <td><%= user.getLastName() %></td>
             <td><%= user.getEmail() %></td>
             <td><%= user.getDob() %></td>
+            <td>
+                <%
+                    if(user instanceof Teacher) {
+                %>
+                <%= ((Teacher) user).getSubject().getName() %>
+                <% } else { %>
+                -
+                <% } %>
+            </td>
             <td>
                 <form action="displayModify" method="post" style="display:inline;">
                     <input type="hidden" name="userId" value="<%= user.getId() %>">
