@@ -14,6 +14,24 @@
 <% String title = "List of users"; %>
 <%@ include file="banner.jsp" %>
 <div class="centerdiv">
+    <form name="searchForm" method="post" action="${pageContext.request.contextPath}/admin/search">
+        <label for="emailSearch">Email : </label>
+        <input class="inputarea" type="text" id="emailSearch" name="emailSearch"/>
+
+
+        <label for="userType">User type:</label>
+        <select name="userType" id="userType" onchange="updateUserType()">
+            <option value=""></option>
+            <option value="ADMIN">Admin</option>
+            <option value="TEACHER">Teacher</option>
+            <option value="STUDENT">Student</option>
+        </select>
+
+        <input type="submit" value="Submit"/>
+        <br>
+        <br>
+    </form>
+
     <table>
         <thead>
             <tr>
