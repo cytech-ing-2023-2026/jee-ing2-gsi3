@@ -1,7 +1,26 @@
-# Java EE ING 2 Project
+# Java EE ING 2
 
-DUBIN-MASSÉ Maxime, FROMENTIN Raphaël, GICQUEL Lili-Rose, POINSATTE Alice, TRUONG Audrey
+CRUD Spring Boot school project for CY Tech. 
 
-## Installing
+Authors:
+- DUBIN-MASSÉ Maxime
+- FROMENTIN Raphaël
+- GICQUEL Lili-Rose
+- POINSATTE Alice
+- TRUONG Audrey
 
-TODO
+## Running the project
+
+Note: Java **21 or higher** is required.
+
+Linux:
+
+```shell
+./mvnw spring-boot:run
+```
+
+Windows:
+
+```shell
+.\mvnw.cmd spring-boot:run
+```
